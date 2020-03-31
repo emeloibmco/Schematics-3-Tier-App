@@ -12,7 +12,7 @@ variable "ibmcloud_resource_group" {
 }
 
 data "ibm_resource_group" "group" {
-  name = "${var.ibm_resource_group}"
+  name = "${var.ibmcloud_resource_group}"
 }
 
 resource "ibm_is_ssh_key" "sshkey" {
