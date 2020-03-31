@@ -7,12 +7,13 @@ variable "ibmcloud_api_key" {
   description = "Enter your IBM Cloud API Key, you can get your IBM Cloud API key using: https://console.bluemix.net/iam#/apikeys"
 }
 
-variable "ibmcloud_resource_group" {
-  description = "Enter your IBM Cloud resource group"
+variable "resource_group" {
+  description = "Name of resource group to provision resources"
+  default     = "landing-zone"
 }
 
 data "ibm_resource_group" "group" {
-  name = "${var.ibmcloud_resource_group}"
+  name = "${var.resource_group}"
 }
 
 resource "ibm_is_ssh_key" "sshkey" {
