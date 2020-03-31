@@ -18,7 +18,7 @@ data "ibm_resource_group" "group" {
 
 resource "ibm_is_ssh_key" "sshkey" {
   name       = "sshforjoomla"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLkp7uT/BGP3Jky3qO9hX1JK4GtxL/O0mVUFzKXKdsvU4QLPGGKOgGmlPkcN0mautI7qIKxWzNGXd8zElvSr34Ofy6bFCrOcZsL8dbR7bIe6OhEMCbfrYFziQQTv4aiC5g3HYQW1Y+DEwwOFisbgCJ7hE+p1SCec+ydqifOXQ9fNWbbAeODgaSI2XQLrHo/3I90Gi2uYarjHvjE3KBLlLUY6p7Y5VW4Ir0H+Ey3L+CzejXpCjc/FnZxJtzMslZt41Y5LkyljCHzDYatY/jd/fPrfhBmzq0IhDdp2/mA2a/6MJhqOkQPlkl8E0xGUJu78XFTzwnclT0CoAFtHiqWEUF"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrj07zmf/ZgFlL/y7v6jNVzomf7zF6CLsSGi8BQQO8QYkAEXKUcWn+ZBMjdYV+k02cCT91L0u5JjYuDVuP434p94SyS9Ur9xVapz5kNub2JAWF4JgB9HyKnEkDJAk/596f7LpBslXs8cTzQIS6UnykCl9GKd825U+EwC2YMj/B3MAnxsTNYq27PNVo2aTH6OgufSb5h+2LfbREFfTDlDe/ASzKFUC9MxuJFJzOLeZtTMHPUQWq+0Z/WRybzEnDoQXoA0b/8UxzGvvbgPLGSPEt+qtb6r9BAqXuWFpQ+YIDODYWjg5J1T0a6xpf1iwGXhDuH8z42DlN395vpV/B1f+B"
 }
 
 resource "ibm_is_vpc" "vpcforjoomla" {
