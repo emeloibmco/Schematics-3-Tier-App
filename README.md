@@ -29,9 +29,9 @@ El software Apache Tomcat se desarrolla en un entorno abierto y participativo y 
 Con el fin de ilustrar los recursos necesarios para el despliegue de la plataforma Joomla, a continuación de muestra un diagrama.
 
 <p align="center">
-<img width="500" alt="img8" src="https://user-images.githubusercontent.com/40369712/78176984-fcf75880-7422-11ea-9818-06d01467b886.png">
+<img width="500" alt="img8" src="https://user-images.githubusercontent.com/40369712/78075357-007ad900-736a-11ea-9764-5bbcecd75dc8.png">
 </p>
 
 # Referencias 📖
 
-* [Pagina de joomla](http://tomcat.apache.org/)
+* [Pagina de joomla](https://www.joomla.org/about-joomla.html)
