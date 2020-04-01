@@ -18,9 +18,10 @@ Como caracteristicas especificas de este laboratorio se uso:
 
 ### 1. Acerca de joomla
 
-El Apache Tomcat ® software es una implementación de código abierto del servlet de Java, Java Server Pages, Lengua y Java WebSocket tecnologías de expresión de Java. Las especificaciones Java Servlet, JavaServer Pages, Java Expression Language y Java WebSocket se desarrollan bajo el Proceso de la Comunidad Java .
 
-El software Apache Tomcat se desarrolla en un entorno abierto y participativo y se publica bajo la licencia de Apache versión 2 . El proyecto Apache Tomcat está destinado a ser una colaboración de los mejores desarrolladores de todo el mundo. Te invitamos a participar en este proyecto de desarrollo abierto. Para obtener más información sobre cómo participar, haga clic aquí .
+Joomla! es un sistema de administración de contenido (CMS) gratuito y de código abierto para publicar contenido web. Con los años Joomla! ha ganado varios premios . Se basa en un marco de aplicación web modelo-vista-controlador que se puede usar independientemente del CMS que le permite crear potentes aplicaciones en línea.
+
+Joomla! es uno de los softwares de sitios web más populares, gracias a su comunidad global de desarrolladores y voluntarios, que se aseguran de que la plataforma sea fácil de usar, ampliable, multilingüe, accesible, receptiva, optimizada para motores de búsqueda y mucho más.
 
 [referencia.](https://www.joomla.org/about-joomla.html)
 
