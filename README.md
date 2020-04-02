@@ -14,6 +14,8 @@ Como caracteristicas especificas de este laboratorio se uso:
 * Acerca de joomla
 * Arquitectura de implementación
 * Ejecución de la plantilla de terraform en IBM Cloud Schematics
+* Ejecución del playbook de ansible para la configuración de mysql en el virtual server
+* Despliegue y configuración de la imagen joomla en el cluster de kubernetes
 
 
 ### 1. Acerca de joomla
@@ -32,6 +34,22 @@ Con el fin de ilustrar los recursos necesarios para el despliegue de la platafor
 <p align="center">
 <img width="500" alt="img8" src="https://user-images.githubusercontent.com/40369712/78075357-007ad900-736a-11ea-9764-5bbcecd75dc8.png">
 </p>
+
+### 3. Ejecución de la plantilla de terraform en IBM Cloud Schematics
+
+Ingrese a IBM Cloud para crear un espacio de trabajo en [Schematics](https://cloud.ibm.com/schematics/workspaces) y seleccione crear espacio de trabajo.
+
+<p align="center">
+<img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/78297909-3a78e600-74f6-11ea-8912-35423ddee121.png">
+</p>
+
+Allí debera proporcional un nombre, las etiquetas que desee, la descripción y seleccionar el el grupo de recursos.
+
+
+<p align="center">
+<img width="400" alt="img8" src="https://user-images.githubusercontent.com/40369712/78298384-d1926d80-74f7-11ea-88d6-877e7202ca48.png">
+</p>
+
 
 # Referencias 📖
 
