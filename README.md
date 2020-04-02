@@ -53,14 +53,22 @@ Allí debera proporcional un nombre, las etiquetas que desee, la descripción y 
 Ingrese la [URL del git](https://github.com/emeloibmco/Schematics-VPC-Schematics-3-Tier-App-Joomla/tree/master/Terraform) donde se encuentra la plantilla de despliegue de terraform y presione recuperar variables de entrada.
 
 <p align="center">
-<img width="400" alt="img8" src="https://user-images.githubusercontent.com/40369712/78302860-46b67080-7501-11ea-8c8f-def1363ea6f8.png">
+<img width="400" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303221-e116b400-7501-11ea-9d71-6d2ce8610c74.png">
 </p>
 
 Ingrese en los campos las variables necesarias para el despliegue, en este caso el API key de infraestructura y el grupo de recursos.
 
 <p align="center">
-<img width="400" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303084-9eed7280-7501-11ea-9171-62c42d474b3d.png">
+<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303084-9eed7280-7501-11ea-9171-62c42d474b3d.png">
 </p>
+
+Una vez creado el espacio de trabajo, presione generar plan y posteriormente aplicar plan para desplegar los recursos descritos en la plantilla.
+
+<p align="center">
+<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78304020-78c8d200-7503-11ea-8dfd-5f7c35c83b29.png">
+</p>
+
+
 
 # Referencias 📖
 
