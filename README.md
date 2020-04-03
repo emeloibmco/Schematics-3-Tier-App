@@ -81,7 +81,7 @@ Por ultimo, debera agregar la dirección Ip en el playbook a ejecutar, para esto
 Ahora podra ejecutar su playbook con el siguiente comando:
 
 ```
-ansible-playbook -i hosts mysql.yml
+ansible-playbook -i hosts mysqlvsi.yml
 ```
 
 
