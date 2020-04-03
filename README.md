@@ -33,7 +33,7 @@ Joomla! es uno de los softwares de sitios web más populares, gracias a su comun
 Con el fin de ilustrar los recursos necesarios para el despliegue de la plataforma Joomla, a continuación de muestra un diagrama.
 
 <p align="center">
-<img width="500" alt="img8" src="https://user-images.githubusercontent.com/40369712/78075357-007ad900-736a-11ea-9764-5bbcecd75dc8.png">
+<img width="500" alt="img8" src="https://user-images.githubusercontent.com/40369712/78384024-0ad1e880-759f-11ea-98fb-5693f2c9a60e.png">
 </p>
 
 ### 3. Ejecución de la plantilla de terraform en IBM Cloud Schematics
