@@ -1,4 +1,4 @@
-- hosts: <IP-VSI>
+- hosts: <ip-of-vsi>
   become: yes
   become_method: sudo
   remote_user: root 
@@ -8,12 +8,8 @@
   - name: Install Python
     raw: apt -y update && apt install -y python-minimal
 
-  - name: install pip
-    apt:
-      name:
-      - python-pip
-      state: present 
-
+  - name: Install Pip
+    raw: apt install python-pip 
 
   - name: python3-mysqldb
     apt:
@@ -48,17 +44,18 @@
       update_cache: yes
       state: latest
       
-#  - name: Update MySQL root password for localhost root account
-#    shell: >
-#      mysql -u root -NBe
-#      'ALTER USER "root"@"localhost"
-#      IDENTIFIED WITH mysql_native_password BY "Passw0rd";'
+  - name: Update MySQL root password for localhost root account
+    shell: >
+      mysql -u root -NBe
+      'ALTER USER "root"@"localhost"
+      IDENTIFIED WITH mysql_native_password BY "Passw0rd";'
 
   - name: Create database user with name 'joomla' and password 'Passw0rd' with all database privileges
     mysql_user:
       name: joomla
       password: Passw0rd
       priv: '*.*:ALL'
+      host: '%'
       login_user: root
       login_password: 'Passw0rd' 
       connect_timeout: 120
