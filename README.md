@@ -68,6 +68,21 @@ Una vez creado el espacio de trabajo, presione generar plan y posteriormente apl
 <img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78304020-78c8d200-7503-11ea-8dfd-5f7c35c83b29.png">
 </p>
 
+### 4. Ejecución del playbook de ansible para la configuración de mysql en el virtual server
+
+Antes de ejecutar el playbook debe configurarse la llave ssh, la dirección ip del virtual server.
+
+Para editar el archivo que contiene la llave ssh, debe ingresar a la ruta /etc/ansible/.ssh/ y allí debera copiar el archivo que contiene la llave privada y renombrarlo con la extención .pem.
+
+Ahora debera modificar la ruta y la direccíon Ip del virtual server, para esto con el editor de texto edite el archivo **hosts**, en la primera linea de este archivo debera colocar la direccíon IP y el nombre de su nuevo archivo con la llave privada ssh.
+
+Por ultimo, debera agregar la dirección Ip en el playbook a ejecutar, para esto edite el archivo mysql.yml y cambie la dirección Ip por la del servidor.
+
+Ahora podra ejecutar su playbook con el siguiente comando:
+
+```
+ansible-playbook -i hosts mysql.yml
+```
 
 
 # Referencias 📖
