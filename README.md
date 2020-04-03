@@ -17,6 +17,7 @@ Como caracteristicas especificas de este laboratorio se uso:
 * Ejecución del playbook de ansible para la configuración de mysql en el virtual server
 * Despliegue y configuración de la imagen joomla en el cluster de kubernetes
 
+---
 
 ### 1. Acerca de joomla
 
@@ -43,7 +44,7 @@ Ingrese a IBM Cloud para crear un espacio de trabajo en [Schematics](https://clo
 <img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/78297909-3a78e600-74f6-11ea-8912-35423ddee121.png">
 </p>
 
-Allí debera proporcional un nombre, las etiquetas que desee, la descripción y seleccionar el el grupo de recursos.
+Allí debera proporcional un nombre, las etiquetas que desee, la descripción y seleccionar el grupo de recursos.
 
 
 <p align="center">
@@ -56,10 +57,10 @@ Ingrese la [URL del git](https://github.com/emeloibmco/Schematics-VPC-Schematics
 <img width="400" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303221-e116b400-7501-11ea-9d71-6d2ce8610c74.png">
 </p>
 
-Ingrese en los campos las variables necesarias para el despliegue, en este caso el API key de infraestructura y el grupo de recursos.
+Ingrese en los campos las variables necesarias para el despliegue, en este caso el API key de infraestructura, la llave publica ssh y el grupo de recursos.
 
 <p align="center">
-<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303084-9eed7280-7501-11ea-9171-62c42d474b3d.png">
+<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78373792-a871eb80-7590-11ea-8348-f194fcf57618.png">
 </p>
 
 Una vez creado el espacio de trabajo, presione generar plan y posteriormente aplicar plan para desplegar los recursos descritos en la plantilla.
@@ -81,9 +82,59 @@ Por ultimo, debera agregar la dirección Ip en el playbook a ejecutar, para esto
 Ahora podra ejecutar su playbook con el siguiente comando:
 
 ```
-ansible-playbook -i hosts mysql.yml
+ansible-playbook -i hosts mysqlvsi.yml
 ```
 
+### 5. Despliegue y configuración de la imagen joomla en el cluster de kubernetes
+
+**a.**	Obtenga la imagen de Joomla localmente ejecutando el siguiente comando.
+
+```
+docker pull joomla
+```
+
+**b.**	Etiquete la imagen de Docker que acaba de añadir a su repositorio local para que sea compatible con el formato requerido por IBM, ejecute el siguiente comando:
+
+```
+docker tag <nombre_imagen_local> us.icr.io/<namespace>/<nombre_imagen>
+Ejemplo: docker tag joomla us.icr.io/pruebanamespace/joomla
+```
+
+**c.**	Realice el push de la imagen que acaba de crear al cr de IBM Cloud.
+
+```
+docker push us.icr.io/<namespace>/<nombre_imagen>
+Ejemplo: docker push us.icr.io/pruebanamespace/joomla
+```
+
+**d.**	Cree el despliegue de la imagen.
+
+```
+kubectl create deployment <nombre_despliegue> --image=us.icr.io/<namespace>/<imagen>
+Ejemplo: kubectl create deployment joomla --image=us.icr.io/pruebanamespace/Joomla
+```
+
+**e.**	Configure las variables de entorno de la conexión con la base de datos.
+
+Para esto debe verificar la dirección de IP privada del virtual server en el que esta alojada la base de datos.
+
+```
+kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12:3306
+kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=joomla
+kubectl set env deployment/joomla JOOMLA_DB_USER=joomla
+```
+
+**f.**	Exponga el servicio del despliegue.
+
+```
+kubectl expose deployment/joomla --type=NodePort --port=80
+```
+
+**g.**	Exponga un balanceador de carga para hacer visible el despliegue de forma pública.
+
+```
+kubectl expose deployment/joomla --type=LoadBalancer --name=hw-lb-svc  --port=80 --target-port=80
+```
 
 # Referencias 📖
 
