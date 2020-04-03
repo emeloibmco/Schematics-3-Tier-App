@@ -43,7 +43,7 @@ Ingrese a IBM Cloud para crear un espacio de trabajo en [Schematics](https://clo
 <img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/78297909-3a78e600-74f6-11ea-8912-35423ddee121.png">
 </p>
 
-Allí debera proporcional un nombre, las etiquetas que desee, la descripción y seleccionar el el grupo de recursos.
+Allí debera proporcional un nombre, las etiquetas que desee, la descripción y seleccionar el grupo de recursos.
 
 
 <p align="center">
@@ -56,10 +56,10 @@ Ingrese la [URL del git](https://github.com/emeloibmco/Schematics-VPC-Schematics
 <img width="400" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303221-e116b400-7501-11ea-9d71-6d2ce8610c74.png">
 </p>
 
-Ingrese en los campos las variables necesarias para el despliegue, en este caso el API key de infraestructura y el grupo de recursos.
+Ingrese en los campos las variables necesarias para el despliegue, en este caso el API key de infraestructura, la llave publica ssh y el grupo de recursos.
 
 <p align="center">
-<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78303084-9eed7280-7501-11ea-9171-62c42d474b3d.png">
+<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78373792-a871eb80-7590-11ea-8348-f194fcf57618.png">
 </p>
 
 Una vez creado el espacio de trabajo, presione generar plan y posteriormente aplicar plan para desplegar los recursos descritos en la plantilla.
