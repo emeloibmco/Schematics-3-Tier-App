@@ -76,7 +76,7 @@ Para editar el archivo que contiene la llave ssh, debe ingresar a la ruta /etc/a
 
 Ahora debera modificar la ruta y la direccíon Ip del virtual server, para esto con el editor de texto edite el archivo **hosts**, en la primera linea de este archivo debera colocar la direccíon IP y el nombre de su nuevo archivo con la llave privada ssh.
 
-Por ultimo, debera agregar la dirección Ip en el playbook a ejecutar, para esto edite el archivo mysql.yml y cambie la dirección Ip por la del servidor.
+Por ultimo, debera agregar la dirección Ip en el playbook a ejecutar, para esto edite el archivo mysqlvsi.yml y cambie la dirección Ip por la del servidor.
 
 Ahora podra ejecutar su playbook con el siguiente comando:
 

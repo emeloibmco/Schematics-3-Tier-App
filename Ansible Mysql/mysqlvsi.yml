@@ -1,4 +1,4 @@
-- hosts: 52.117.171.159
+- hosts: <IP-VSI>
   become: yes
   become_method: sudo
   remote_user: root 
