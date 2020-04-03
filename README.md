@@ -17,6 +17,7 @@ Como caracteristicas especificas de este laboratorio se uso:
 * Ejecución del playbook de ansible para la configuración de mysql en el virtual server
 * Despliegue y configuración de la imagen joomla en el cluster de kubernetes
 
+---
 
 ### 1. Acerca de joomla
 
@@ -84,6 +85,53 @@ Ahora podra ejecutar su playbook con el siguiente comando:
 ansible-playbook -i hosts mysqlvsi.yml
 ```
 
+### 5. Despliegue y configuración de la imagen joomla en el cluster de kubernetes
+
+1.	Obtenga la imagen de Joomla localmente ejecutando el siguiente comando.
+docker pull joomla
+
+2.	Etiquete la imagen de Docker que acaba de añadir a su repositorio local para que sea compatible con el formato requerido por IBM, ejecute el siguiente comando:
+
+```
+docker tag <nombre_imagen_local> us.icr.io/<namespace>/<nombre_imagen>
+Ejemplo: docker tag joomla us.icr.io/pruebanamespace/joomla
+```
+
+3.	Realice el push de la imagen que acaba de crear al cr de IBM Cloud.
+
+```
+docker push us.icr.io/<namespace>/<nombre_imagen>
+Ejemplo: docker push us.icr.io/pruebanamespace/joomla
+```
+
+4.	Cree el despliegue de la imagen.
+
+```
+kubectl create deployment <nombre_despliegue> --image=us.icr.io/<namespace>/<imagen>
+Ejemplo: kubectl create deployment joomla --image=us.icr.io/pruebanamespace/Joomla
+```
+
+5.	Configure las variables de entorno de la conexión con la base de datos.
+
+Para esto debe verificar la dirección de IP privada del virtual server en el que esta alojada la base de datos.
+
+```
+kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12:3306
+kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=joomla
+kubectl set env deployment/joomla JOOMLA_DB_USER=joomla
+```
+
+6.	Exponga el servicio del despliegue.
+
+```
+kubectl expose deployment/joomla --type=NodePort --port=80
+```
+
+7.	Exponga un balanceador de carga para hacer visible el despliegue de forma pública.
+
+```
+kubectl expose deployment/joomla --type=LoadBalancer --name=hw-lb-svc  --port=80 --target-port=80
+```
 
 # Referencias 📖
 
