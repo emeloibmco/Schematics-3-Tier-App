@@ -24,9 +24,9 @@ Como caracteristicas especificas de este laboratorio se uso:
 
 Joomla! es un sistema de administración de contenido (CMS) gratuito y de código abierto para publicar contenido web. Con los años Joomla! ha ganado varios premios . Se basa en un marco de aplicación web modelo-vista-controlador que se puede usar independientemente del CMS que le permite crear potentes aplicaciones en línea.
 
-Joomla! es uno de los softwares de sitios web más populares, gracias a su comunidad global de desarrolladores y voluntarios, que se aseguran de que la plataforma sea fácil de usar, ampliable, multilingüe, accesible, receptiva, optimizada para motores de búsqueda y mucho más.
+Joomla! es uno de los softwares de sitios web más populares, gracias a su comunidad global de desarrolladores y voluntarios, que se aseguran de que la plataforma sea fácil de usar, ampliable, multilingüe, accesible, receptiva, optimizada para motores de búsqueda y mucho más. [referencia.](https://www.joomla.org/about-joomla.html)
 
-[referencia.](https://www.joomla.org/about-joomla.html)
+---
 
 ### 2. Arquitectura de implementación
 
@@ -35,6 +35,8 @@ Con el fin de ilustrar los recursos necesarios para el despliegue de la platafor
 <p align="center">
 <img width="500" alt="img8" src="https://user-images.githubusercontent.com/40369712/78384024-0ad1e880-759f-11ea-98fb-5693f2c9a60e.png">
 </p>
+
+---
 
 ### 3. Ejecución de la plantilla de terraform en IBM Cloud Schematics
 
@@ -69,6 +71,8 @@ Una vez creado el espacio de trabajo, presione generar plan y posteriormente apl
 <img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/78304020-78c8d200-7503-11ea-8dfd-5f7c35c83b29.png">
 </p>
 
+---
+
 ### 4. Ejecución del playbook de ansible para la configuración de mysql en el virtual server
 
 Antes de ejecutar el playbook debe configurarse la llave ssh, la dirección ip del virtual server.
@@ -84,6 +88,8 @@ Ahora podra ejecutar su playbook con el siguiente comando:
 ```
 ansible-playbook -i hosts mysqlvsi.yml
 ```
+
+---
 
 ### 5. Despliegue y configuración de la imagen joomla en el cluster de kubernetes
 
@@ -135,6 +141,8 @@ kubectl expose deployment/joomla --type=NodePort --port=80
 ```
 kubectl expose deployment/joomla --type=LoadBalancer --name=hw-lb-svc  --port=80 --target-port=80
 ```
+
+---
 
 # Referencias 📖
 
