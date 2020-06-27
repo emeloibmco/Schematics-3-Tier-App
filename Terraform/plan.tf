@@ -144,7 +144,7 @@ resource "kubernetes_service" "joomla" {
   }
   spec {
     selector = {
-      App = kubernetes_pod.joomla.metadata[0].labels.App
+      App = "${kubernetes_pod.joomla.metadata[0].labels.App}
     }
     port {
       port        = 80
@@ -156,5 +156,5 @@ resource "kubernetes_service" "joomla" {
 }
 
 output "lb_ip" {
-  value = kubernetes_service.joomla.load_balancer_ingress[0].ip
+  value = "${kubernetes_service.joomla.load_balancer_ingress[0].ip}
 }
