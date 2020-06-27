@@ -156,5 +156,5 @@ resource "kubernetes_service" "joomla" {
 }
 
 output "lb_ip" {
-  value = "${kubernetes_service.joomla.load_balancer_ingress[0].ip}"
+  value = "${kubernetes_service.joomla.load_balancer_ingress.ip}"
 }
