@@ -99,12 +99,14 @@ data "ibm_container_cluster_config" "iks_cluster_config" {
 }
 
 provider "kubernetes" { 
+    depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
     load_config_file = "true"
     config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
 }
 
 
 resource "kubernetes_pod" "joomla" {
+  depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
   metadata {
     name = "joomla-example"
     labels = {
@@ -140,6 +142,7 @@ resource "kubernetes_pod" "joomla" {
 }
 
 resource "kubernetes_service" "joomla" {
+  depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
   metadata {
     name = "joomla-example"
   }
@@ -157,5 +160,6 @@ resource "kubernetes_service" "joomla" {
 }
 
 output "lb_ip" {
+  depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
   value = "${kubernetes_service.joomla.load_balancer_ingress.ip}"
 }
