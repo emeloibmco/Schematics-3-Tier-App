@@ -99,8 +99,10 @@ data "ibm_container_cluster_config" "iks_cluster_config" {
 }
 
 provider "kubernetes" { 
-    load_config_file = "true"
-    config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
+    load_config_file       = "false"
+    host                   = "${data.ibm_container_cluster_config.iks_cluster_config.host
+    token                  = "${data.ibm_container_cluster_config.iks_cluster_config.token
+    cluster_ca_certificate = "${data.ibm_container_cluster_config.iks_cluster_config.ca_certificate
 }
 
 
