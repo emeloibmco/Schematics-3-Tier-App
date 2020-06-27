@@ -94,12 +94,12 @@ output sshcommand {
 
 data "ibm_container_cluster_config" "iks_cluster_config" {
     cluster_name_id = "iks-joomla"
-    resource_group_id = "${data.ibm_resource_group.group.id}
+    resource_group_id = "${data.ibm_resource_group.group.id}"
 }
 
 provider "kubernetes" { 
     load_config_file = "true"
-    config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}
+    config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
 }
 
 
