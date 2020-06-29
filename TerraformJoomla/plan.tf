@@ -3,6 +3,10 @@ provider "ibm" {
   region             = "us-south"
 }
 
+data "ibm_is_vpc" "vpcjoomla" {
+  name = "vpcjoomla"
+}
+
 data "ibm_resource_group" "group" {
   name = "${var.resource_group}"
 }
