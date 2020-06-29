@@ -7,6 +7,11 @@ data "ibm_is_vpc" "vpcjoomla" {
   name = "vpcjoomla"
 }
 
+output "lb_ip" {
+  value = "${ibm_is_vpc.vpcjoomla}"
+}
+
+
 data "ibm_resource_group" "group" {
   name = "${var.resource_group}"
 }
@@ -76,8 +81,4 @@ resource "kubernetes_service" "joomla" {
 
     type = "LoadBalancer"
   }
-}
-
-output "lb_ip" {
-  value = "${kubernetes_service.joomla.load_balancer_ingress.ip}"
 }
