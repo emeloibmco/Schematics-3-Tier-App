@@ -17,12 +17,23 @@ resource "ibm_is_vpc" "vpcforjoomla" {
   resource_group = "${data.ibm_resource_group.group.id}"
 }
 
+resource "ibm_is_public_gateway" "joomla_gateway" {
+  name = "gatewayforjoomla"
+  vpc  = "${ibm_is_vpc.vpcforjoomla.id}"
+  zone = "us-south-1"
+
+  //User can configure timeouts
+  timeouts {
+    create = "90m"
+  }
+}
+
 resource "ibm_is_subnet" "subnetjoomla" {
   name            = "subnetjoomla"
   vpc             = "${ibm_is_vpc.vpcforjoomla.id}"
   zone            = "us-south-1"
   total_ipv4_address_count= "256"
-  public_gateway  = "yes"
+  public_gateway  = "${ibm_is_public_gateway.joomla_gateway.id}"
 }
 
 resource "ibm_is_security_group" "securitygroupforjoomla" {
