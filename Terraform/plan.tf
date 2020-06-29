@@ -133,7 +133,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "10.241.91.80:3306"
+              value = "${ibm_is_instance.vsi1.address}:3306"
           }
            
            env {
