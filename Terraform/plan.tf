@@ -110,6 +110,10 @@ data "ibm_container_cluster_config" "iks_cluster_config" {
     depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
 }
 
+output path {
+  value = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
+}
+
 provider "kubernetes" { 
     load_config_file       = "true"
     config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
