@@ -112,6 +112,7 @@ data "ibm_container_cluster_config" "iks_cluster_config" {
 }
 
 provider "kubernetes" { 
+    version                = "1.11.1"
     load_config_file       = "false"
     host                   = "${data.ibm_container_cluster_config.iks_cluster_config.host}"
     client_certificate     = "${data.ibm_container_cluster_config.iks_cluster_config.admin_certificate}"
