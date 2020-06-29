@@ -22,6 +22,7 @@ resource "ibm_is_subnet" "subnetjoomla" {
   vpc             = "${ibm_is_vpc.vpcforjoomla.id}"
   zone            = "us-south-1"
   total_ipv4_address_count= "256"
+  public_gateway  = "yes"
 }
 
 resource "ibm_is_security_group" "securitygroupforjoomla" {
