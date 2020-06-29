@@ -37,7 +37,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "10.0.0.0:3306"
+              value = "10.10.10.0:3306"
           }
            
            env {
