@@ -5,6 +5,7 @@ provider "ibm" {
 
 data "ibm_is_vpc" "vpcjoomla" {
   name = "vpcjoomla"
+  resource_group_id = "${data.ibm_resource_group.group.id}"
 }
 
 output "lb_ip" {
