@@ -159,7 +159,7 @@ resource "kubernetes_service" "joomla" {
   }
   spec {
     selector = {
-      App = "${kubernetes_pod.joomla.metadata.labels.App}"
+      App = "${kubernetes_pod.joomla.metadata[0].labels.App}"
     }
     port {
       port        = 80
