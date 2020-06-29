@@ -133,7 +133,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "`${ibm_is_instance.vsi1.address}:3306`"
+              value = "${ibm_is_instance.vsi1.primary_network_interface.address}:3306"
           }
            
            env {
@@ -159,7 +159,7 @@ resource "kubernetes_service" "joomla" {
   }
   spec {
     selector = {
-      App = "${kubernetes_pod.joomla.metadata[0].labels.App}"
+      App = "${kubernetes_pod.joomla.metadata.0.labels.App}"
     }
     port {
       port        = 80
