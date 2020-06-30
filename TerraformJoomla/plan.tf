@@ -49,6 +49,11 @@ resource "kubernetes_pod" "joomla" {
               value = "joomla"
           }
 
+          liveness_probe {
+          initial_delay_seconds = 5
+          period_seconds        = 5
+        }
+
 
       port {
         container_port = 80
