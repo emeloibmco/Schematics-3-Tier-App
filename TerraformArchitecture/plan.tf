@@ -107,7 +107,6 @@ resource "ibm_container_vpc_cluster" "iks-joomla" {
 
 data "ibm_container_cluster_config" "iks_cluster_config" {
     cluster_name_id = "iks-joomla"
-    config_dir = "~/.kube/config"
     resource_group_id = "${data.ibm_resource_group.group.id}"
     depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
 }
@@ -118,7 +117,7 @@ output path {
 
 provider "kubernetes" { 
     load_config_file       = "true"
-    config_path = "~/.kube/config"
+    config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
 }
 
 
