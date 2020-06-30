@@ -104,6 +104,11 @@ resource "ibm_container_vpc_cluster" "iks-joomla" {
   }
 }
 
+resource "null_resource" "example2" {
+  provisioner "local-exec" {
+    command = "touch home/nobody/config.yml"
+  }
+}
 
 data "ibm_container_cluster_config" "iks_cluster_config" {
     cluster_name_id = "iks-joomla"
