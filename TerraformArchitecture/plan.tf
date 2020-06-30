@@ -111,12 +111,12 @@ data "ibm_container_cluster_config" "iks_cluster_config" {
 }
 
 output path {
-  value = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path.host}"
+  value = "${data.ibm_container_cluster_config.iks_cluster_config}"
 }
 
 provider "kubernetes" { 
     load_config_file       = "true"
-    config_path = "${data.ibm_container_cluster_config.iks_cluster_config}"
+    config_path = "${data.ibm_container_cluster_config.iks_cluster_config.config_file_path}"
 }
 
 
