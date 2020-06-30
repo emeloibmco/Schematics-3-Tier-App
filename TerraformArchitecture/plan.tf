@@ -61,7 +61,7 @@ resource "ibm_is_instance" "vsi1" {
 }
 
 output sshcommand {
-  value = "${ibm_is_instance.vsi1.primary_network_interface}"
+  value = "${ibm_is_instance.vsi1.primary_network_interface.primary_ipv4_address}"
 }
 
 resource "ibm_is_security_group_rule" "testacc_security_group_rule_all" {
@@ -134,7 +134,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "10.10.10.10:3306"
+              value = "${ibm_is_instance.vsi1.primary_network_interface.primary_ipv4_address}:3306"
           }
            
            env {
