@@ -22,7 +22,7 @@ spec:
       default: us-south
     - name: clusterNamespace
       description: The Kubernetes cluster namespace
-      default: production
+      default: proyecto
   workspaces:
   - name: pipeline
   tasks:

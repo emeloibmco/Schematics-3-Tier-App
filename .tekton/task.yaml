@@ -19,7 +19,7 @@ spec:
         description: the ibmcloud registry namespace
       - name: imageName
         description: the base image name
-        default: "joomla-image"
+        default: "back-image"
       - name: registryRegion
         description: the ibmcloud registry region
   workspaces:
@@ -163,7 +163,7 @@ spec:
       - name: deployment-file
         default: deployment.yml
       - name: clusterNamespace
-        default: production
+        default: prod
       - name: cluster
         description: The IBM Cloud Kubernetes cluster name
       - name: clusterRegion
