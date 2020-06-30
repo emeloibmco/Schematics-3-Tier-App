@@ -121,12 +121,14 @@ locals {
 resource "kubernetes_pod" "joomla" {
   metadata {
     name = "joomla-example"
+    namespace = "default"
     labels = {
       App = "joomla"
     }
   }
 
   spec {
+    active_deadline_seconds = 1200
     container {
       image = "joomla"
       name  = "joomla"
