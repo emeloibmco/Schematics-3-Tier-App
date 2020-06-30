@@ -118,7 +118,7 @@ locals {
 }
 
 output sshcommand {
-  value = "${locals.dBip.value}"
+  value = "${local.dBip}"
 }
 
 resource "kubernetes_pod" "joomla" {
@@ -136,7 +136,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "${ibm_is_instance.vsi1.primary_network_interface.primary_ipv4_address}:3306"
+              value = "${local.dBip}"
           }
            
            env {
