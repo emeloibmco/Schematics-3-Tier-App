@@ -171,7 +171,7 @@ resource "kubernetes_service" "joomla" {
   }
 }
 
-output sshcommand {
+output host {
   value = "host para la base de datos: ${local.dBip}"
 }
 
