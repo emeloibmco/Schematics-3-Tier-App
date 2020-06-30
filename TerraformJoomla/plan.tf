@@ -3,16 +3,6 @@ provider "ibm" {
   region             = "us-south"
 }
 
-data "ibm_is_vpc" "vpcjoomla" {
-  name = "vpcjoomla"
-  resource_group_id = "${data.ibm_resource_group.group.id}"
-}
-
-output "lb_ip" {
-  value = "${ibm_is_vpc.vpcjoomla}"
-}
-
-
 data "ibm_resource_group" "group" {
   name = "${var.resource_group}"
 }
@@ -47,7 +37,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "10.10.10.0:3306"
+              value = "10.10.10.10:3306"
           }
            
            env {
