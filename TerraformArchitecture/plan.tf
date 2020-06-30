@@ -60,10 +60,6 @@ resource "ibm_is_instance" "vsi1" {
   keys = ["${ibm_is_ssh_key.sshkey.id}"]
 }
 
-output sshcommand {
-  value = "${ibm_is_instance.vsi1.primary_network_interface.primary_ipv4_address}"
-}
-
 resource "ibm_is_security_group_rule" "testacc_security_group_rule_all" {
   group     = "${ibm_is_security_group.securitygroupforjoomla.id}"
   direction = "inbound"
@@ -117,6 +113,13 @@ provider "kubernetes" {
     cluster_ca_certificate = "${data.ibm_container_cluster_config.iks_cluster_config.ca_certificate}"
 }
 
+locals {
+  dBip = "${ibm_is_instance.vsi1.primary_network_interface.primary_ipv4_address}:3306"
+}
+
+output sshcommand {
+  value = "${locals.dBip}"
+}
 
 resource "kubernetes_pod" "joomla" {
   metadata {
