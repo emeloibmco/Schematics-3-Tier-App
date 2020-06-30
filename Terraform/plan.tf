@@ -103,7 +103,7 @@ resource "ibm_container_vpc_cluster" "iks-joomla" {
 data "ibm_container_cluster_config" "iks_cluster_config" {
     cluster_name_id = "iks-joomla"
     resource_group_id = "${data.ibm_resource_group.group.id}"
-#    depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
+    depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
 }
 
 
@@ -116,10 +116,6 @@ provider "kubernetes" {
 
 locals {
   dBip = "${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}:3306"
-}
-
-output sshcommand {
-  value = "${local.dBip}"
 }
 
 resource "kubernetes_pod" "joomla" {
@@ -171,4 +167,12 @@ resource "kubernetes_service" "joomla" {
 
     type = "LoadBalancer"
   }
+}
+
+output sshcommand {
+  value = "host para la base de datos: ${local.dBip}"
+}
+
+output sshcommand {
+  value = "ip flotante: ${ibm_is_floating_ip.ipf1.address}"
 }
