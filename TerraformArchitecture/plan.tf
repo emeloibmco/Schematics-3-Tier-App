@@ -118,7 +118,7 @@ locals {
 }
 
 output sshcommand {
-  value = "${locals.dBip}"
+  value = "${locals.dBip.value}"
 }
 
 resource "kubernetes_pod" "joomla" {
