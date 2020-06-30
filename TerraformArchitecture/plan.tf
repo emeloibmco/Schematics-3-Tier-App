@@ -101,7 +101,7 @@ resource "ibm_container_vpc_cluster" "iks-joomla" {
 }
 
 output sshcommand {
-  value = "ssh root@${ibm_is_floating_ip.ipf1.address}"
+  "${ibm_is_instance.vsi1}"
 }
 
 
