@@ -61,7 +61,7 @@ resource "ibm_is_instance" "vsi1" {
 }
 
 output sshcommand {
-  "${ibm_is_instance.vsi1}"
+  value = "${ibm_is_instance.vsi1}"
 }
 
 resource "ibm_is_security_group_rule" "testacc_security_group_rule_all" {
