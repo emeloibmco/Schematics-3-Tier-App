@@ -60,6 +60,10 @@ resource "ibm_is_instance" "vsi1" {
   keys = ["${ibm_is_ssh_key.sshkey.id}"]
 }
 
+output sshcommand {
+  "${ibm_is_instance.vsi1}"
+}
+
 resource "ibm_is_security_group_rule" "testacc_security_group_rule_all" {
   group     = "${ibm_is_security_group.securitygroupforjoomla.id}"
   direction = "inbound"
@@ -98,10 +102,6 @@ resource "ibm_container_vpc_cluster" "iks-joomla" {
     subnet_id = "${ibm_is_subnet.subnetjoomla.id}"
     name      = "${ibm_is_subnet.subnetjoomla.zone}"
   }
-}
-
-output sshcommand {
-  "${ibm_is_instance.vsi1}"
 }
 
 
