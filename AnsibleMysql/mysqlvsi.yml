@@ -9,7 +9,7 @@
     raw: apt -y update && apt install -y python-minimal
 
   - name: Install Pip
-    raw: apt install python-pip 
+    raw: apt -y install python-pip 
 
   - name: python3-mysqldb
     apt:
