@@ -69,6 +69,15 @@ resource "ibm_is_security_group_rule" "testacc_security_group_rule_all" {
   }
 }
 
+resource "ibm_is_security_group_rule" "testacc_security_group_rule_db" {
+  group     = "${ibm_is_security_group.securitygroupforjoomla.id}"
+  direction = "inbound"
+  tcp {
+    port_min = 3306
+    port_max = 3306
+  }
+}
+
 resource "ibm_is_security_group_rule" "testacc_security_group_rule_icmp" {
   group     = "${ibm_is_security_group.securitygroupforjoomla.id}"
   direction = "inbound"
@@ -114,10 +123,6 @@ provider "kubernetes" {
     cluster_ca_certificate = "${data.ibm_container_cluster_config.iks_cluster_config.ca_certificate}"
 }
 
-locals {
-  dBip = "${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}:3306"
-}
-
 resource "kubernetes_pod" "joomla" {
   metadata {
     name = "joomla-example"
@@ -135,7 +140,7 @@ resource "kubernetes_pod" "joomla" {
 
           env {
               name = "JOOMLA_DB_HOST"
-              value = "${local.dBip}"
+              value = "${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}"
           }
            
            env {
@@ -144,6 +149,10 @@ resource "kubernetes_pod" "joomla" {
           }
           env {
               name = "JOOMLA_DB_USER"
+              value = "joomla"
+          }
+          env {
+              name = "JOOMLA_DB_NAME"
               value = "joomla"
           }
 
