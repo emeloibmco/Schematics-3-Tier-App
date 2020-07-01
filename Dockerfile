@@ -13,5 +13,4 @@
 #   limitations under the License.
 
 FROM joomla
-RUN apt update && apt upgrade
 WORKDIR /usr/src/app
