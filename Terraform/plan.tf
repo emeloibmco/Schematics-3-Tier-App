@@ -147,30 +147,33 @@ resource "kubernetes_deployment" "joomla" {
         }
       }
 
-    container {
-      image = "joomla"
-      name  = "joomla"
+      spec{
+        container {
+          image = "joomla"
+          name  = "joomla"
 
-          env {
-              name = "JOOMLA_DB_HOST"
-              value = "${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}"
-          }
-           
-           env {
-              name = "JOOMLA_DB_PASSWORD"
-              value = "Passw0rd"
-          }
-          env {
-              name = "JOOMLA_DB_USER"
-              value = "joomla"
-          }
-          env {
-              name = "JOOMLA_DB_NAME"
-              value = "joomla"
-          }
+              env {
+                  name = "JOOMLA_DB_HOST"
+                  value = "${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}"
+              }
+              
+              env {
+                  name = "JOOMLA_DB_PASSWORD"
+                  value = "Passw0rd"
+              }
+              env {
+                  name = "JOOMLA_DB_USER"
+                  value = "joomla"
+              }
+              env {
+                  name = "JOOMLA_DB_NAME"
+                  value = "joomla"
+              }
 
-      port {
-        container_port = 80
+          port {
+            container_port = 80
+          }
+        }
       }
     }
   }
