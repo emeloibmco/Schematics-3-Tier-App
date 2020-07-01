@@ -38,6 +38,10 @@ else
 fi    
 set -x
 kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE} 
+kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12
+kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd
+kubectl set env deployment/joomla JOOMLA_DB_USER=joomla
+kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla
 set +x
 
 echo ""
