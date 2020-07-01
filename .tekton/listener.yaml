@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: template
@@ -22,7 +22,7 @@ spec:
       default: us-south
     - name: clusterNamespace
       description: The Kubernetes cluster namespace
-      default: proyecto
+      default: prod
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -31,32 +31,40 @@ spec:
       spec:
         resources:
           requests:
-            storage: 5Gi
+            storage:  5Gi
         volumeMode: Filesystem
         accessModes:
           - ReadWriteOnce
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         name: pipelinerun-$(uid)
       spec:
         pipelineRef:
-          name: pipeline
+            name: pipeline
         workspaces:
-          - name: pipeline
+          - name: pipeline-pvc
             persistentVolumeClaim:
               claimName: pipelinerun-$(uid)-pvc
         params:
-          - name: cluster
-            value: $(params.cluster)
-          - name: clusterRegion
-            value: $(params.clusterRegion)
-          - name: clusterNamespace
-            value: $(params.clusterNamespace)
-          - name: imageName
-            value: $(imageName)
+        - name: repository
+          value: $(params.repository)
+        - name: revision
+          value: $(params.revision)
+        - name: apikey
+          value: $(params.apikey)
+        - name: registryNamespace
+          value: $(params.registryNamespace)
+        - name: registryRegion
+          value: $(params.registryRegion)
+        - name: cluster
+          value: $(params.cluster)
+        - name: clusterRegion
+          value: $(params.clusterRegion)
+        - name: clusterNamespace
+          value: $(params.clusterNamespace)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
 metadata:
   name: binding
@@ -67,7 +75,7 @@ spec:
     - name: revision
       value: "master"
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: listener
