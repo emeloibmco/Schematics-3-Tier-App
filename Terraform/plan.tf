@@ -123,17 +123,30 @@ provider "kubernetes" {
     cluster_ca_certificate = "${data.ibm_container_cluster_config.iks_cluster_config.ca_certificate}"
 }
 
-resource "kubernetes_pod" "joomla" {
+resource "kubernetes_deployment" "joomla" {
   metadata {
     name = "joomla-example"
-    namespace = "default"
     labels = {
       App = "joomla"
     }
   }
 
   spec {
-    active_deadline_seconds = 1200
+    replicas = 2
+
+    selector {
+      match_labels = {
+        test = "joomla"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          test = "joomla"
+        }
+      }
+
     container {
       image = "joomla"
       name  = "joomla"
@@ -169,7 +182,7 @@ resource "kubernetes_service" "joomla" {
   }
   spec {
     selector = {
-      App = "${kubernetes_pod.joomla.metadata.0.labels.App}"
+      App = "${kubernetes_deployment.joomla.metadata.0.labels.App}"
     }
     port {
       port        = 80
