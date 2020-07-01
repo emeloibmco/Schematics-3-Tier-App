@@ -181,7 +181,7 @@ resource "kubernetes_service" "joomla" {
 }
 
 output host {
-  value = "host para la base de datos: "${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}"
+  value = "host para la base de datos: ${ibm_is_instance.vsi1.primary_network_interface.0.primary_ipv4_address}"
 }
 
 output sshcommand {
