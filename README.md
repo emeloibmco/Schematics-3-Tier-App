@@ -125,9 +125,10 @@ Ejemplo: kubectl create deployment joomla --image=us.icr.io/pruebanamespace/Joom
 Para esto debe verificar la dirección de IP privada del virtual server en el que esta alojada la base de datos.
 
 ```
-kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12:3306
-kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=joomla
+kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12
+kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla
+kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla
 ```
 
 **f.**	Exponga el servicio del despliegue.
