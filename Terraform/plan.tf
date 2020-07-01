@@ -103,7 +103,7 @@ resource "ibm_container_vpc_cluster" "iks-joomla" {
 data "ibm_container_cluster_config" "iks_cluster_config" {
     cluster_name_id = "iks-joomla"
     resource_group_id = "${data.ibm_resource_group.group.id}"
-    depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
+    #depends_on = ["ibm_container_vpc_cluster.iks-joomla"]
 }
 
 
