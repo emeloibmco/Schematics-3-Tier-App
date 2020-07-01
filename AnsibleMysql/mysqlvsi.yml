@@ -5,19 +5,16 @@
 
   tasks:
 
+  - name: Install update
+    raw: apt -y update
+
   - name: Install Python
-    raw: apt -y update && apt install -y python-minimal
+    raw: apt install -y python-minimal
 
   - name: Install Pip
-    raw: apt -y install python-pip 
+    raw: apt install -y python-pip 
 
   - name: python3-mysqldb
-    apt:
-      name:
-      - python-mysqldb
-      state: present
-
-  - name: python-mysqldb
     apt:
       name:
       - python-mysqldb
@@ -67,3 +64,15 @@
       login_user: root
       login_password: 'Passw0rd'
       state: present
+
+  - name: Insert
+    blockinfile:
+      path: /etc/mysql/my.cnf
+      block: |
+        [mysqld]
+        bind-address    = 0.0.0.0
+
+  - name: restart mysql service
+    systemd:
+      state: restarted
+      name: mysql
