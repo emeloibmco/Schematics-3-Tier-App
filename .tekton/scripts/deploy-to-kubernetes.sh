@@ -42,6 +42,7 @@ kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUST
 kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
+kubectl expose deployment/joomla --type=LoadBalancer --name=hw-lb-svc --port=80 --target-port=80 --namespace ${CLUSTER_NAMESPACE}
 set +x
 
 echo ""
