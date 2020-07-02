@@ -47,7 +47,7 @@ LB_NAME=hw-lb-svc
 if kubectl get svc -n ${CLUSTER_NAMESPACE} | grep ${LB_NAME}; then
   echo -e "LoadBalancer service with ${LB_NAME} already exists"
   echo "Deleting ${LB_NAME} service"
-  kubectl delete -n ${CLUSTER_NAMESPACE} service hw-lb-svc
+  kubectl delete -n ${CLUSTER_NAMESPACE} service ${LB_NAME}
 fi
 kubectl expose deployment/joomla --type=LoadBalancer --name=${LB_NAME} --port=80 --target-port=80 --namespace ${CLUSTER_NAMESPACE}
 
