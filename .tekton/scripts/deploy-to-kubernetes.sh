@@ -44,7 +44,7 @@ kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NA
 kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
 LB_NAME=hw-lb-svc
 
-if [ -n kubectl get svc -n ${CLUSTER_NAMESPACE} | grep ${LB_NAME} ]; then
+if kubectl get svc -n ${CLUSTER_NAMESPACE} | grep ${LB_NAME}; then
   echo -e "LoadBalancer service with ${LB_NAME} already exists"
   exit 1
 fi
