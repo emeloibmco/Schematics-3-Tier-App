@@ -38,10 +38,10 @@ else
 fi    
 set -x
 kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE} 
-kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12
-kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd
-kubectl set env deployment/joomla JOOMLA_DB_USER=joomla
-kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla
+kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUSTER_NAMESPACE}
+kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
+kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
+kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
 set +x
 
 echo ""
