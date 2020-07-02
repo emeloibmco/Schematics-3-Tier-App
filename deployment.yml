@@ -1,16 +1,16 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: joomla-csm
+  name: joomla
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: joomla-csm
+      app: joomla
   template:
     metadata:
       labels:
-        app: joomla-csm
+        app: joomla
     spec:
       containers:
         - name: joomla-csm
@@ -34,4 +34,4 @@ spec:
       targetPort: 80
   # label keys and values that must match in order to receive traffic for this service
   selector:
-    app: joomla-csm
+    app: joomla
