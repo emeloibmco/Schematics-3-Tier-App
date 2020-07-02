@@ -14,6 +14,9 @@
   - name: Install Pip
     raw: apt install -y python-pip 
 
+  - name: Install Pip
+    raw: apt install -y python-pip 
+
   - name: python3-mysqldb
     apt:
       name:
@@ -58,7 +61,7 @@
       connect_timeout: 120
       state: present
 
-  - name: Create a new database with name 'bobdata'
+  - name: Create a new database with name 'joomla'
     mysql_db:
       name: joomla
       login_user: root
