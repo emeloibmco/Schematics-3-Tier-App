@@ -48,7 +48,7 @@ fi
 kubectl create deployment joomla --image=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --namespace ${CLUSTER_NAMESPACE}
 
 # set env vars to joomla image
-kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUSTER_NAMESPACE}
+kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.45 --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
