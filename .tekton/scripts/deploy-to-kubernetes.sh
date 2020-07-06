@@ -28,20 +28,22 @@ echo "CLUSTER_NAMESPACE=${CLUSTER_NAMESPACE}"
 echo "=========================================================="
 echo "DEPLOYING using manifest"
 echo -e "Updating ${DEPLOYMENT_FILE} with image name: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}"
-if [ -z "${DEPLOYMENT_FILE}" ]; then DEPLOYMENT_FILE=deployment.yml; fi
-if [ -f ${DEPLOYMENT_FILE} ]; then
-  sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}~" ${DEPLOYMENT_FILE}
-  cat ${DEPLOYMENT_FILE}
-else
-  echo -e "${red}Kubernetes deployment file '${DEPLOYMENT_FILE}' not found${no_color}"
-  exit 1
-fi
+#if [ -z "${DEPLOYMENT_FILE}" ]; then DEPLOYMENT_FILE=deployment.yml; fi
+#if [ -f ${DEPLOYMENT_FILE} ]; then
+#  sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}~" ${DEPLOYMENT_FILE}
+#  cat ${DEPLOYMENT_FILE}
+#else
+#  echo -e "${red}Kubernetes deployment file '${DEPLOYMENT_FILE}' not found${no_color}"
+#  exit 1
+#fi
 set -x
-kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE}
+# kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE}
+kubectl create deployment joomla --image=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME} --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
+kubectl expose deployment/joomla --type=NodePort --port=80
 LB_NAME=hw-lb-svc
 
 if kubectl get svc -n ${CLUSTER_NAMESPACE} | grep ${LB_NAME}; then
@@ -92,8 +94,8 @@ if [ ! -z "${APP_NAME}" ]; then
   echo "DEPLOYED SERVICES:"
   kubectl describe services ${APP_SERVICE} --namespace ${CLUSTER_NAMESPACE}
 fi
-#echo "Application Logs"
-#kubectl logs --selector app=${APP_NAME} --namespace ${CLUSTER_NAMESPACE}
+echo "Application Logs"
+kubectl logs --selector app=${APP_NAME} --namespace ${CLUSTER_NAMESPACE}
 echo ""
 if [[ ! -z "$NOT_READY" ]]; then
   echo ""
