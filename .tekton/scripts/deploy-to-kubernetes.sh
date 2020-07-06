@@ -52,6 +52,13 @@ kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUST
 kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
+
+# Create Joomla Service
+if kubectl get svc joomla; then
+	echo -e "Joomla Service already exists"
+	echo "Deleting service"
+	kubectl delete -n ${CLUSTER_NAMESPACE} service joomla
+fi
 kubectl expose deployment/joomla --type=NodePort --port=80
 
 # Create LoadBalancer Service
