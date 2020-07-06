@@ -116,8 +116,8 @@ echo "DEPLOYMENT SUCCEEDED"
    # else
       # create OpenShift route
     #  cat >test-route.json <<EOF
-{"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"name":"${APP_SERVICE}"},"spec":{"to":{"kind":"Service","name":"${APP_SERVICE}"}}}
-EOF
+# {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"name":"${APP_SERVICE}"},"spec":{"to":{"kind":"Service","name":"${APP_SERVICE}"}}}
+#EOF
 #      echo ""
  #     cat test-route.json
   #    kubectl apply -f test-route.json --validate=false --namespace ${CLUSTER_NAMESPACE}
