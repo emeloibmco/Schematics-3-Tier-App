@@ -38,14 +38,24 @@ echo -e "Updating ${DEPLOYMENT_FILE} with image name: ${REGISTRY_URL}/${REGISTRY
 #fi
 set -x
 # kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE}
-kubectl run joomla --image=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --namespace ${CLUSTER_NAMESPACE}
+
+# Create Deployment
+if kubectl get deployment/joomla; then
+	echo -e "Deployment already exists"
+	echo "Deleting deployment"
+	kubectl delete -n ${CLUSTER_NAMESPACE} deployment joomla
+fi
+kubectl create deployment joomla --image=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --namespace ${CLUSTER_NAMESPACE}
+
+# set env vars to joomla image
 kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_NAME=joomla --namespace ${CLUSTER_NAMESPACE}
 kubectl expose deployment/joomla --type=NodePort --port=80
-LB_NAME=hw-lb-svc
 
+# Create LoadBalancer Service
+LB_NAME=hw-lb-svc
 if kubectl get svc -n ${CLUSTER_NAMESPACE} | grep ${LB_NAME}; then
   echo -e "LoadBalancer service with ${LB_NAME} already exists"
   echo "Deleting ${LB_NAME} service"
