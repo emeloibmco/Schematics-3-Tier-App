@@ -38,7 +38,7 @@ echo -e "Updating ${DEPLOYMENT_FILE} with image name: ${REGISTRY_URL}/${REGISTRY
 #fi
 set -x
 # kubectl apply --namespace ${CLUSTER_NAMESPACE} -f ${DEPLOYMENT_FILE}
-kubectl create deployment joomla --image=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --namespace ${CLUSTER_NAMESPACE}
+kubectl run joomla --image=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_HOST=10.240.0.12 --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_PASSWORD=Passw0rd --namespace ${CLUSTER_NAMESPACE}
 kubectl set env deployment/joomla JOOMLA_DB_USER=joomla --namespace ${CLUSTER_NAMESPACE}
