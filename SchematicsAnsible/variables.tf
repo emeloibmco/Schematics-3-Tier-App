@@ -62,12 +62,7 @@ variable "bastion_cidr" {
   default     = "172.22.192.0/20"
 }
 
-variable "frontend_cidr" {
-  description = "Complete CIDR range across all three zones for frontend subnets"
-  default     = "172.16.0.0/20"
-}
-
-variable "backend_cidr" {
+variable "vsi_cidr" {
   description = "Complete CIDR range across all three zones for backend subnets"
   default     = "172.17.0.0/20"
 }

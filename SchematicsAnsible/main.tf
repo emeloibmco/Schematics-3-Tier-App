@@ -49,13 +49,12 @@ module "vpc" {
   frontend_count       = local.frontend_count
   frontend_cidr_blocks = local.frontend_cidr_blocks
   backend_count        = local.backend_count
-  backend_cidr_blocks  = local.backend_cidr_blocks
+  vsi_cidr_blocks  = local.vsi_cidr_blocks
 }
 
 locals {
   # bastion_cidr_blocks  = [cidrsubnet(var.bastion_cidr, 4, 0), cidrsubnet(var.bastion_cidr, 4, 2), cidrsubnet(var.bastion_cidr, 4, 4)]
-  frontend_cidr_blocks = [cidrsubnet(var.frontend_cidr, 4, 0), cidrsubnet(var.frontend_cidr, 4, 2), cidrsubnet(var.frontend_cidr, 4, 4)]
-  backend_cidr_blocks  = [cidrsubnet(var.backend_cidr, 4, 0), cidrsubnet(var.backend_cidr, 4, 2), cidrsubnet(var.backend_cidr, 4, 4)]
+  vsi_cidr_blocks = [cidrsubnet(var.frontend_cidr, 4, 0), cidrsubnet(var.frontend_cidr, 4, 2), cidrsubnet(var.frontend_cidr, 4, 4)]
 }
 
 
@@ -69,7 +68,7 @@ module "bastion" {
   ibm_is_resource_group_id = data.ibm_resource_group.all_rg.id
   bastion_cidr             = var.bastion_cidr
   ssh_source_cidr_blocks   = local.bastion_ingress_cidr
-  destination_cidr_blocks  = [var.frontend_cidr, var.backend_cidr]
+  destination_cidr_blocks  = [var.frontend_cidr, var.vsi_cidr]
   destination_sgs          = [module.frontend.security_group_id, module.backend.security_group_id]
   # destination_sg          = [module.frontend.security_group_id, module.backend.security_group_id]
   # vsi_profile             = "cx2-2x4"
