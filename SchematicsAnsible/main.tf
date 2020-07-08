@@ -47,7 +47,7 @@ module "vpc" {
   generation           = local.generation
   unique_id            = var.vpc_name
   frontend_count       = local.frontend_count
-  frontend_cidr_blocks = local.vsi_cidr_blocks
+  vsi_cidr_blocks = local.vsi_cidr_blocks
   backend_count        = local.backend_count
   vsi_cidr_blocks  = local.vsi_cidr_blocks
 }
