@@ -26,7 +26,7 @@ locals {
     ["outbound", "161.26.0.0/16", "tcp", 80, 80],
     ["outbound", "161.26.0.0/16", "tcp", 443, 443],
     ["inbound", "0.0.0.0/0", "tcp", 22, 22],
-    ["inbound", "0.0.0.0/0", "icmp", 8, 0],
+    ["inbound", "0.0.0.0/0", "icmp", 0, 8],
   ]
 
   sg_sourcerules = [
