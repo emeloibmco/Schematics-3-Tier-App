@@ -51,6 +51,7 @@ resource "ibm_is_vpc_address_prefix" "subnet_prefix" {
 
 # Increase count to create subnets in all zones
 resource "ibm_is_subnet" "subnet" {
+  count = var.frontend_count
   name            = "${var.unique_id}-subnet-${count.index + 1}"
   vpc             = ibm_is_vpc.vpc.id
   zone            = "${var.ibm_region}-${count.index % 3 + 1}"
