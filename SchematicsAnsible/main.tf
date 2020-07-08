@@ -53,7 +53,7 @@ module "vpc" {
 
 locals {
   # bastion_cidr_blocks  = [cidrsubnet(var.bastion_cidr, 4, 0), cidrsubnet(var.bastion_cidr, 4, 2), cidrsubnet(var.bastion_cidr, 4, 4)]
-  vsi_cidr_blocks = [cidrsubnet(var.frontend_cidr, 4, 0), cidrsubnet(var.frontend_cidr, 4, 2), cidrsubnet(var.frontend_cidr, 4, 4)]
+  vsi_cidr_blocks = [cidrsubnet(var.vsi_cidr, 4, 0), cidrsubnet(var.vsi_cidr, 4, 2), cidrsubnet(var.vsi_cidr, 4, 4)]
 }
 
 
