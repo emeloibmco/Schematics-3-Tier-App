@@ -87,7 +87,7 @@ module "frontend" {
   profile                  = var.profile
   ibm_is_image_id          = data.ibm_is_image.os.id
   ibm_is_ssh_key_id        = data.ibm_is_ssh_key.sshkey.id
-  subnet_ids               = module.vpc.frontend_subnet_ids
+  subnet_ids               = module.vpc.subnet_ids
   bastion_remote_sg_id     = module.bastion.security_group_id
   bastion_subnet_CIDR      = var.bastion_cidr
   pub_repo_egress_cidr     = local.pub_repo_egress_cidr
