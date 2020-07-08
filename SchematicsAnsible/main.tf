@@ -49,7 +49,6 @@ module "vpc" {
   frontend_count       = local.frontend_count
   vsi_cidr_blocks = local.vsi_cidr_blocks
   backend_count        = local.backend_count
-  vsi_cidr_blocks  = local.vsi_cidr_blocks
 }
 
 locals {
