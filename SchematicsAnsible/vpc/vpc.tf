@@ -55,9 +55,9 @@ resource "ibm_is_subnet" "subnet" {
   name            = "${var.unique_id}-subnet-${count.index + 1}"
   vpc             = ibm_is_vpc.vpc.id
   zone            = "${var.ibm_region}-${count.index % 3 + 1}"
-  ipv4_cidr_block = var.vsi_cidr_blocks[0]
+  ipv4_cidr_block = var.vsi_cidr_blocks[count.index]
   #network_acl     = "${ibm_is_network_acl.multizone_acl.id}"
-  public_gateway = ibm_is_public_gateway.repo_gateway[0].id
+  public_gateway = ibm_is_public_gateway.repo_gateway[count.index].id
   depends_on     = [ibm_is_vpc_address_prefix.subnet_prefix]
 }
 
