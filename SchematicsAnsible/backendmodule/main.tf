@@ -32,55 +32,6 @@ resource "ibm_is_instance" "backend-server" {
   tags           = ["schematics:group:backend"]
 }
 
-
-##############################################################################
-# Private load balancer
-# 
-##############################################################################
-
-
-# resource "ibm_is_lb" "webapptier-lb" {
-#   name    = "backapptier"
-#   type    = "private"
-#   subnets = toset(var.subnet_ids)
-# resource_group = var.ibm_is_resource_group_id
-# }
-
-
-# resource "ibm_is_lb_listener" "webapptier-lb-listener" {
-#   lb           = ibm_is_lb.webapptier-lb.id
-#   port         = "80"
-#   protocol     = "http"
-#   default_pool = element(split("/", ibm_is_lb_pool.webapptier-lb-pool.id), 1)
-#   depends_on   = [ibm_is_lb_pool.webapptier-lb-pool]
-# }
-
-# resource "ibm_is_lb_pool" "webapptier-lb-pool" {
-#   lb                 = ibm_is_lb.webapptier-lb.id
-#   name               = "webapptier-lb-pool"
-#   protocol           = "http"
-#   algorithm          = "round_robin"
-#   health_delay       = "5"
-#   health_retries     = "2"
-#   health_timeout     = "2"
-#   health_type        = "http"
-#   health_monitor_url = "/"
-#   depends_on         = [ibm_is_lb.webapptier-lb]
-# }
-
-# resource "ibm_is_lb_pool_member" "webapptier-lb-pool-member-zone1" {
-#   count          = var.backend_count
-#   lb             = ibm_is_lb.webapptier-lb.id
-#   pool           = element(split("/", ibm_is_lb_pool.webapptier-lb-pool.id), 1)
-#   port           = "8080"
-#   target_address = ibm_is_instance.backend-server[count.index].primary_network_interface[0].primary_ipv4_address
-#   depends_on     = [ibm_is_lb_pool.webapptier-lb-pool]
-# }
-
-
-
-
-
 # this is the SG applied to the backend instances
 resource "ibm_is_security_group" "backend" {
   name           = "${var.unique_id}-backend-sg"
@@ -100,7 +51,9 @@ locals {
     ["outbound", "161.26.0.0/24", "tcp", 80, 80],
     ["outbound", "161.26.0.0/24", "udp", 53, 53],
     ["outbound", var.pub_repo_egress_cidr, "tcp", 443, 443],
-    ["inbound", "0.0.0.0/0", "tcp", 80, 80]
+    ["inbound", "0.0.0.0/0", "tcp", 80, 80],
+    ["inbound", "0.0.0.0/0", "tcp", 22, 22],
+    ["inbound", "0.0.0.0/0", "icmp", 8, 0]
   ]
 
   sg_mappedrules = [
