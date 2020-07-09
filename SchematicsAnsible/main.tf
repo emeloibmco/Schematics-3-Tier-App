@@ -125,7 +125,7 @@ module "accesscheck" {
 ##################################################################################################
 
 output "schematicsid" {
-  value = schematics
+  value = "schematics"
 
 }
 
