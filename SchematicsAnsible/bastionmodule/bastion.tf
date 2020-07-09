@@ -13,7 +13,7 @@
 resource "ibm_is_instance" "bastion" {
   count   = var.bastion_count
   name    = "${var.unique_id}-bastion-vsi-${count.index + 1}"
-  image   = "r006-6f153a5d-6a9a-496d-8063-5c39932f6ded"
+  image   = data.ibm_is_image.os.id
   profile = var.vsi_profile
 
   primary_network_interface {
