@@ -124,6 +124,17 @@ module "accesscheck" {
 #  Config servers
 ##################################################################################################
 
+output "schematicsid" {
+  value = schematics
+
+}
+
+resource "local_file" "terraform_source_state" {
+  filename          = "${path.module}/ansible-data/schematics.tfstate"
+  sensitive_content = data.ibm_schematics_state.vpc.state_store_json
+
+}
+
 resource "null_resource" "ansible" {
   connection {
     bastion_host = module.bastion.bastion_ip_addresses[0]
@@ -148,4 +159,5 @@ resource "null_resource" "ansible" {
       connect_timeout_seconds              = 60
     }
   }
+  depends_on = [local_file.terraform_source_state]
 }
