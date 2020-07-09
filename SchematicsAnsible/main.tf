@@ -124,9 +124,14 @@ module "accesscheck" {
 #  Config servers
 ##################################################################################################
 
-output "schematicsid" {
-  value = "schematics"
 
+data "ibm_schematics_workspace" "vpc" {
+  workspace_id = "joomla-ansible-9c1f0752-0238-47"
+}
+
+data "ibm_schematics_state" "vpc" {
+  workspace_id = var.workspace_id
+  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
 }
 
 resource "local_file" "terraform_source_state" {
