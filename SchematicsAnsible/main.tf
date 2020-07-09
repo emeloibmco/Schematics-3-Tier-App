@@ -148,5 +148,4 @@ resource "null_resource" "ansible" {
       connect_timeout_seconds              = 60
     }
   }
-  depends_on = [local_file.terraform_source_state]
 }
