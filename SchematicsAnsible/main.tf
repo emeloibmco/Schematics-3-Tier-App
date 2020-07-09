@@ -130,7 +130,7 @@ data "ibm_schematics_workspace" "vpc" {
 }
 
 data "ibm_schematics_state" "vpc" {
-  workspace_id = var.workspace_id
+  workspace_id = "joomla-ansible-9c1f0752-0238-47"
   template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
 }
 
