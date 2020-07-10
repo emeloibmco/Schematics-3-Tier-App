@@ -132,6 +132,7 @@ data "ibm_schematics_workspace" "vpc" {
 data "ibm_schematics_state" "vpc" {
   workspace_id = "joomla-bastion-ansible-3ab6d034-efbe-4f"
   template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
+  depends_on = [ibm_is_instance.backend-server]
 }
 
 resource "local_file" "terraform_source_state" {
