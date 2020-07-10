@@ -126,11 +126,11 @@ module "accesscheck" {
 
 
 data "ibm_schematics_workspace" "vpc" {
-  workspace_id = "joomla-ansible-9c1f0752-0238-47"
+  workspace_id = "joomla-bastion-ansible-3ab6d034-efbe-4f"
 }
 
 data "ibm_schematics_state" "vpc" {
-  workspace_id = "joomla-ansible-9c1f0752-0238-47"
+  workspace_id = "joomla-bastion-ansible-3ab6d034-efbe-4f"
   template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
 }
 
