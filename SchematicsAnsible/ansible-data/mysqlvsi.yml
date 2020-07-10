@@ -1,21 +1,23 @@
-- hosts: backend
+- hosts: all
   become: yes
   become_method: sudo
   remote_user: root 
 
   tasks:
-
   - name: Install update
+  - hosts: backend
     raw: apt -y update
 
-  - name: Install Python
-    raw: apt install -y python-minimal
-
-  - name: Install Pip
-    raw: apt install -y python-pip 
-
-  - name: Install Pip
-    raw: apt install -y python-pip 
+  - name: mysql-client
+    apt:
+      name:
+      - python-pip
+      - python-minimal
+      - mysql-client
+      - python-apt
+      - python3-apt
+      update_cache: yes
+      state: present
 
   - name: python3-mysqldb
     apt:
@@ -26,24 +28,15 @@
   - name: python3-mysqldb
     pip:
       name:
-      - PyMySQL 
-      state: present 
-
-  - name: mysql-client 
-    apt: 
-      name:
-      - mysql-client
-      - python-apt
-      - python3-apt
-      update_cache: yes
-      state: absent 
+      - PyMySQL
+      state: present
 
   - name: install python-pymysql
     apt:
       pkg: mysql-server
       update_cache: yes
       state: latest
-      
+
   - name: Update MySQL root password for localhost root account
     shell: >
       mysql -u root -NBe
@@ -57,7 +50,7 @@
       priv: '*.*:ALL'
       host: '%'
       login_user: root
-      login_password: 'Passw0rd' 
+      login_password: 'Passw0rd'
       connect_timeout: 120
       state: present
 
@@ -79,3 +72,88 @@
     systemd:
       state: restarted
       name: mysql
+
+    - set_fact:    
+      mysql_db: "{{ hostvars[ item ].ansible_host }}"
+    with_items: "{{groups['backend']}}"
+    
+  - name: Install update
+    hosts: frontend
+    raw: apt update -y && apt upgrade -y
+
+  - name: Install packages
+    apt:
+      name:
+      - apache2
+      - libapache2-mod-php7.2
+      - openssl
+      - php-imagick
+      - php7.2-common
+      - php7.2-curl
+      - php7.2-gd
+      - php7.2-imap
+      - php7.2-intl
+      - php7.2-json
+      - php7.2-ldap
+      - php7.2-mbstring
+      - php7.2-mysql
+      - php7.2-pgsql
+      - php-smbclient
+      - php-ssh2
+      - php7.2-sqlite3
+      - php7.2-xml
+      - php7.2-zip
+      - unzip
+      state: present
+
+  - name: start service apache2
+    systemd:
+      name: apache2
+      state: started
+
+  - name: create the working directory
+    file:
+      path: /var/www/html/joomla
+      state: directory
+
+  - name: Download joomla
+    shell:
+      cmd: wget https://downloads.joomla.org/cms/joomla3/3-9-16/Joomla_3-9-16-Stable-Full_Package.zip
+
+  - name: Unpacket installer
+    shell:
+      cmd: unzip Joomla_3-9-16-Stable-Full_Package.zip -d /var/www/html/joomla
+
+  - name: provide permissions
+    raw: chown -R www-data:www-data /var/www/html/joomla
+
+  - name: provide permissions
+    raw: chmod -R 755 /var/www/html/joomla
+  
+  - name: reload service apache2
+    systemd:
+      name: apache2
+      state: restarted
+
+  - name: Config mysql database
+    blockinfile:
+      path: /var/www/html/joomla/installation/model/configuration.php
+      insertbefore:  "$saveFtp = isset($options->ftp_save) && $options->ftp_save;"
+      block: |
+          public $dbtype = 'mysqli';
+          public $host = '{{ mysql_db }}';
+          public $user = 'joomla';
+          public $password = 'Passw0rd';
+          public $db = 'joomla';
+
+  - name: Change path for apache
+    replace:
+      path: /etc/apache2/sites-available/000-default.conf
+      regexp: 'DocumentRoot /var/www/html'
+      replace: 'DocumentRoot /var/www/html/joomla/'
+
+  - name: Update MySQL root password for localhost root account
+    shell: |
+        a2ensite 000-default.conf
+        a2enmod rewrite
+        systemctl restart apache2
