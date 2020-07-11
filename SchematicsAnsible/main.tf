@@ -124,21 +124,8 @@ module "accesscheck" {
 #  Config servers
 ##################################################################################################
 
-
-data "ibm_schematics_workspace" "vpc" {
-  workspace_id = "joomla-bastion-ansible-3ab6d034-efbe-4f"
-}
-
-data "ibm_schematics_state" "vpc" {
-  workspace_id = "joomla-bastion-ansible-3ab6d034-efbe-4f"
-  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
-  depends_on = [ibm_is_instance.backend-server]
-}
-
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
-  sensitive_content = data.ibm_schematics_state.vpc.state_store_json
-
 }
 
 resource "null_resource" "ansible" {
