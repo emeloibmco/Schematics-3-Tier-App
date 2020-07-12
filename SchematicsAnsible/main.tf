@@ -150,7 +150,7 @@ resource "local_file" "terraform_source_state" {
 
 resource "null_resource" "ansible" {
   connection {
-    bastion_host = data.ibm_schematics_output.vpc.output_values["bastion_host_ip_address"]
+    bastion_host = module.bastion.bastion_ip_addresses[0]
     host         = "0.0.0.0"
     #private_key = "${file("~/.ssh/ansible")}"
     private_key = var.ssh_private_key
