@@ -30,7 +30,6 @@ locals {
 data "external" "env" { program = ["jq", "-n", "env"] }
 locals {
   region = lookup(data.external.env.result, "TF_VAR_SCHEMATICSLOCATION", "")
-  workspaceid = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
   geo    = substr(local.region, 0, 2)
   schematics_ssh_access_map = {
     us = ["169.44.0.0/14", "169.60.0.0/14"],
@@ -126,10 +125,27 @@ module "accesscheck" {
 ##################################################################################################
 
 output "datosdelworspace" {
-  value = "local.workspaceid"
+  value = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+
+data "ibm_schematics_workspace" "vpc" {
+  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+}
+
+data "ibm_schematics_output" "vpc" {
+  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
+}
+
+data "ibm_schematics_state" "vpc" {
+  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
+}
+
 
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
+  sensitive_content = data.ibm_schematics_state.vpc.state_store_json
+
 }
 
 resource "null_resource" "ansible" {
