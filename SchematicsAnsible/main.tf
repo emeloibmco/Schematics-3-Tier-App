@@ -142,9 +142,16 @@ data "ibm_schematics_state" "vpc" {
   template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
 }
 
+resource "time_sleep" "wait_360_seconds" {
+  depends_on = [ibm_schematics_state.vpc]
+
+  create_duration = "360s"
+}
+
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
   sensitive_content = data.ibm_schematics_state.vpc.state_store_json
+  depends_on = [time_sleep.wait_360_seconds]
 }
 
 resource "null_resource" "ansible" {

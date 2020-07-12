@@ -79,7 +79,7 @@
   hosts: frontend
   tasks:
   - name: Install update
-    raw: apt update -y && apt upgrade -y
+    raw: apt -y update
 
   - name: Install packages
     apt:
