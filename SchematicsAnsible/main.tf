@@ -124,6 +124,10 @@ module "accesscheck" {
 #  Config servers
 ##################################################################################################
 
+output "Datos del worspace" {
+  value = lookup(data.external.env.result, "IC_ENV_TAGS", "")
+}
+
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
 }
