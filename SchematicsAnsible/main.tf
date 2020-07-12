@@ -30,6 +30,7 @@ locals {
 data "external" "env" { program = ["jq", "-n", "env"] }
 locals {
   region = lookup(data.external.env.result, "TF_VAR_SCHEMATICSLOCATION", "")
+  workspaceid = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
   geo    = substr(local.region, 0, 2)
   schematics_ssh_access_map = {
     us = ["169.44.0.0/14", "169.60.0.0/14"],
@@ -125,16 +126,31 @@ module "accesscheck" {
 ##################################################################################################
 
 output "datosdelworspace" {
-  value = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+  value = local.workspaceid
+
+data "ibm_schematics_workspace" "vpc" {
+  workspace_id = local.workspaceid
 }
+
+data "ibm_schematics_output" "vpc" {
+  workspace_id = local.workspaceid
+  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
+}
+
+data "ibm_schematics_state" "vpc" {
+  workspace_id = local.workspaceid
+  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
+}
+
 
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
+  sensitive_content = data.ibm_schematics_state.vpc.state_store_json
 }
 
 resource "null_resource" "ansible" {
   connection {
-    bastion_host = module.bastion.bastion_ip_addresses[0]
+    bastion_host = data.ibm_schematics_output.vpc.output_values["bastion_host_ip_address"]
     host         = "0.0.0.0"
     #private_key = "${file("~/.ssh/ansible")}"
     private_key = var.ssh_private_key
