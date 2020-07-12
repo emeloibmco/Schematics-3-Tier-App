@@ -5,7 +5,7 @@
 
   tasks:
   - name: Install update
-  - hosts: backend
+    hosts: backend
     raw: apt -y update
 
   - name: mysql-client
