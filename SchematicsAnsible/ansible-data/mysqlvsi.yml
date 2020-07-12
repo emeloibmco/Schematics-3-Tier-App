@@ -141,7 +141,7 @@
       insertbefore:  "$saveFtp = isset($options->ftp_save) && $options->ftp_save;"
       block: |
           public $dbtype = 'mysqli';
-          public $host = "{{ hostvars[ groups['backend'] ].ansible_host }}";
+          public $host = "172.17.0.4";
           public $user = 'joomla';
           public $password = 'Passw0rd';
           public $db = 'joomla';
