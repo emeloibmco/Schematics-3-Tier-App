@@ -138,7 +138,7 @@ data "ibm_schematics_output" "vpc" {
 }
 
 data "ibm_schematics_state" "vpc" {
-  workspace_id = var.workspace_id
+  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
   template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
 }
 
