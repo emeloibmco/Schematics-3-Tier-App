@@ -126,7 +126,7 @@ module "accesscheck" {
 ##################################################################################################
 
 output "datosdelworspace" {
-  value = local.workspaceid
+  value = "local.workspaceid"
 
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
