@@ -143,7 +143,7 @@ data "ibm_schematics_state" "vpc" {
 }
 
 resource "time_sleep" "wait_360_seconds" {
-  depends_on = [ibm_schematics_state.vpc]
+  depends_on = [data.ibm_schematics_state.vpc]
 
   create_duration = "360s"
 }
