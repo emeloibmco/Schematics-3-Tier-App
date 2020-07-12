@@ -6,7 +6,6 @@
 - name: Config backend
   hosts: backend
   tasks:
-
   - name: update packages
     raw: apt -y update
 
