@@ -4,152 +4,152 @@
   remote_user: root 
 
   tasks:
-  - name: Install update
-    hosts: backend
-    raw: apt -y update
+- name: Install update
+  hosts: backend
+  raw: apt -y update
 
-  - name: mysql-client
-    apt:
-      name:
-      - python-pip
-      - python-minimal
-      - mysql-client
-      - python-apt
-      - python3-apt
-      update_cache: yes
-      state: present
+- name: mysql-client
+  apt:
+    name:
+    - python-pip
+    - python-minimal
+    - mysql-client
+    - python-apt
+    - python3-apt
+    update_cache: yes
+    state: present
 
-  - name: python3-mysqldb
-    apt:
-      name:
-      - python-mysqldb
-      state: present
+- name: python3-mysqldb
+  apt:
+    name:
+    - python-mysqldb
+    state: present
 
-  - name: python3-mysqldb
-    pip:
-      name:
-      - PyMySQL
-      state: present
+- name: python3-mysqldb
+  pip:
+    name:
+    - PyMySQL
+    state: present
 
-  - name: install python-pymysql
-    apt:
-      pkg: mysql-server
-      update_cache: yes
-      state: latest
+- name: install python-pymysql
+  apt:
+    pkg: mysql-server
+    update_cache: yes
+    state: latest
 
-  - name: Update MySQL root password for localhost root account
-    shell: >
-      mysql -u root -NBe
-      'ALTER USER "root"@"localhost"
-      IDENTIFIED WITH mysql_native_password BY "Passw0rd";'
+- name: Update MySQL root password for localhost root account
+  shell: >
+    mysql -u root -NBe
+    'ALTER USER "root"@"localhost"
+    IDENTIFIED WITH mysql_native_password BY "Passw0rd";'
 
-  - name: Create database user with name 'joomla' and password 'Passw0rd' with all database privileges
-    mysql_user:
-      name: joomla
-      password: Passw0rd
-      priv: '*.*:ALL'
-      host: '%'
-      login_user: root
-      login_password: 'Passw0rd'
-      connect_timeout: 120
-      state: present
+- name: Create database user with name 'joomla' and password 'Passw0rd' with all database privileges
+  mysql_user:
+    name: joomla
+    password: Passw0rd
+    priv: '*.*:ALL'
+    host: '%'
+    login_user: root
+    login_password: 'Passw0rd'
+    connect_timeout: 120
+    state: present
 
-  - name: Create a new database with name 'joomla'
-    mysql_db:
-      name: joomla
-      login_user: root
-      login_password: 'Passw0rd'
-      state: present
+- name: Create a new database with name 'joomla'
+  mysql_db:
+    name: joomla
+    login_user: root
+    login_password: 'Passw0rd'
+    state: present
 
-  - name: Insert
-    blockinfile:
-      path: /etc/mysql/my.cnf
-      block: |
-        [mysqld]
-        bind-address    = 0.0.0.0
+- name: Insert
+  blockinfile:
+    path: /etc/mysql/my.cnf
+    block: |
+      [mysqld]
+      bind-address    = 0.0.0.0
 
-  - name: restart mysql service
-    systemd:
-      state: restarted
-      name: mysql
-    
-  - name: Install update
-    hosts: frontend
-    raw: apt update -y && apt upgrade -y
-
-  - name: Install packages
-    apt:
-      name:
-      - apache2
-      - libapache2-mod-php7.2
-      - openssl
-      - php-imagick
-      - php7.2-common
-      - php7.2-curl
-      - php7.2-gd
-      - php7.2-imap
-      - php7.2-intl
-      - php7.2-json
-      - php7.2-ldap
-      - php7.2-mbstring
-      - php7.2-mysql
-      - php7.2-pgsql
-      - php-smbclient
-      - php-ssh2
-      - php7.2-sqlite3
-      - php7.2-xml
-      - php7.2-zip
-      - unzip
-      state: present
-
-  - name: start service apache2
-    systemd:
-      name: apache2
-      state: started
-
-  - name: create the working directory
-    file:
-      path: /var/www/html/joomla
-      state: directory
-
-  - name: Download joomla
-    shell:
-      cmd: wget https://downloads.joomla.org/cms/joomla3/3-9-16/Joomla_3-9-16-Stable-Full_Package.zip
-
-  - name: Unpacket installer
-    shell:
-      cmd: unzip Joomla_3-9-16-Stable-Full_Package.zip -d /var/www/html/joomla
-
-  - name: provide permissions
-    raw: chown -R www-data:www-data /var/www/html/joomla
-
-  - name: provide permissions
-    raw: chmod -R 755 /var/www/html/joomla
+- name: restart mysql service
+  systemd:
+    state: restarted
+    name: mysql
   
-  - name: reload service apache2
-    systemd:
-      name: apache2
-      state: restarted
+- name: Install update
+  hosts: frontend
+  raw: apt update -y && apt upgrade -y
 
-  - name: Config mysql database
-    blockinfile:
-      path: /var/www/html/joomla/installation/model/configuration.php
-      insertbefore:  "$saveFtp = isset($options->ftp_save) && $options->ftp_save;"
-      block: |
-          public $dbtype = 'mysqli';
-          public $host = "{{ hostvars[ groups['backend'] ].ansible_host }}";
-          public $user = 'joomla';
-          public $password = 'Passw0rd';
-          public $db = 'joomla';
+- name: Install packages
+  apt:
+    name:
+    - apache2
+    - libapache2-mod-php7.2
+    - openssl
+    - php-imagick
+    - php7.2-common
+    - php7.2-curl
+    - php7.2-gd
+    - php7.2-imap
+    - php7.2-intl
+    - php7.2-json
+    - php7.2-ldap
+    - php7.2-mbstring
+    - php7.2-mysql
+    - php7.2-pgsql
+    - php-smbclient
+    - php-ssh2
+    - php7.2-sqlite3
+    - php7.2-xml
+    - php7.2-zip
+    - unzip
+    state: present
 
-  - name: Change path for apache
-    replace:
-      path: /etc/apache2/sites-available/000-default.conf
-      regexp: 'DocumentRoot /var/www/html'
-      replace: 'DocumentRoot /var/www/html/joomla/'
+- name: start service apache2
+  systemd:
+    name: apache2
+    state: started
 
-  - name: Update MySQL root password for localhost root account
-    shell: |
-        a2ensite 000-default.conf
-        a2enmod rewrite
-        systemctl restart apache2
+- name: create the working directory
+  file:
+    path: /var/www/html/joomla
+    state: directory
+
+- name: Download joomla
+  shell:
+    cmd: wget https://downloads.joomla.org/cms/joomla3/3-9-16/Joomla_3-9-16-Stable-Full_Package.zip
+
+- name: Unpacket installer
+  shell:
+    cmd: unzip Joomla_3-9-16-Stable-Full_Package.zip -d /var/www/html/joomla
+
+- name: provide permissions
+  raw: chown -R www-data:www-data /var/www/html/joomla
+
+- name: provide permissions
+  raw: chmod -R 755 /var/www/html/joomla
+
+- name: reload service apache2
+  systemd:
+    name: apache2
+    state: restarted
+
+- name: Config mysql database
+  blockinfile:
+    path: /var/www/html/joomla/installation/model/configuration.php
+    insertbefore:  "$saveFtp = isset($options->ftp_save) && $options->ftp_save;"
+    block: |
+        public $dbtype = 'mysqli';
+        public $host = "{{ hostvars[ groups['backend'] ].ansible_host }}";
+        public $user = 'joomla';
+        public $password = 'Passw0rd';
+        public $db = 'joomla';
+
+- name: Change path for apache
+  replace:
+    path: /etc/apache2/sites-available/000-default.conf
+    regexp: 'DocumentRoot /var/www/html'
+    replace: 'DocumentRoot /var/www/html/joomla/'
+
+- name: Update MySQL root password for localhost root account
+  shell: |
+      a2ensite 000-default.conf
+      a2enmod rewrite
+      systemctl restart apache2
