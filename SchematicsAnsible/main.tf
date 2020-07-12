@@ -125,7 +125,7 @@ module "accesscheck" {
 ##################################################################################################
 
 output "datosdelworspace" {
-  value = lookup(data.external.env.result, "IC_ENV_TAGS", "")
+  value = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
 }
 
 resource "local_file" "terraform_source_state" {
