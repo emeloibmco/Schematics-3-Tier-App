@@ -132,16 +132,10 @@ data "ibm_schematics_workspace" "vpc" {
   workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
 }
 
-data "ibm_schematics_output" "vpc" {
-  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
-  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
-  depends_on = [module.backend]
-}
-
 data "ibm_schematics_state" "vpc" {
   workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
   template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
-  depends_on = [module.backend]
+  depends_on = [module.backend.security_group_id]
 }
 
 resource "time_sleep" "wait_360_seconds" {
