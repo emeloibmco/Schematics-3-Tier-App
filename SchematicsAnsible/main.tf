@@ -128,24 +128,8 @@ module "accesscheck" {
 output "datosdelworspace" {
   value = local.workspaceid
 
-data "ibm_schematics_workspace" "vpc" {
-  workspace_id = local.workspaceid
-}
-
-data "ibm_schematics_output" "vpc" {
-  workspace_id = local.workspaceid
-  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
-}
-
-data "ibm_schematics_state" "vpc" {
-  workspace_id = local.workspaceid
-  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
-}
-
-
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
-  sensitive_content = data.ibm_schematics_state.vpc.state_store_json
 }
 
 resource "null_resource" "ansible" {
