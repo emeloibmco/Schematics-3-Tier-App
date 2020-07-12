@@ -4,10 +4,6 @@
   remote_user: root 
 
   tasks:
-    - set_fact:    
-        mysql_db: "{{ hostvars[ item ].ansible_host }}"
-      with_items: "{{groups['backend']}}"
-
   - name: Install update
   - hosts: backend
     raw: apt -y update
@@ -141,7 +137,7 @@
       insertbefore:  "$saveFtp = isset($options->ftp_save) && $options->ftp_save;"
       block: |
           public $dbtype = 'mysqli';
-          public $host = '{{ mysql_db }}';
+          public $host = "{{ hostvars[ groups['backend'] ].ansible_host }}";
           public $user = 'joomla';
           public $password = 'Passw0rd';
           public $db = 'joomla';
