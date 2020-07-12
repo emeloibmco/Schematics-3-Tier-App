@@ -128,6 +128,15 @@ output "datosdelworspace" {
   value = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
 }
 
+data "ibm_schematics_workspace" "vpc" {
+  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+}
+
+data "ibm_schematics_output" "vpc" {
+  workspace_id = trim(lookup(data.external.env.result, "IC_ENV_TAGS", ""), "Schematics:")
+  template_id  = "${data.ibm_schematics_workspace.vpc.template_id.0}"
+}
+
 resource "local_file" "terraform_source_state" {
   filename          = "${path.module}/ansible-data/schematics.tfstate"
 }
