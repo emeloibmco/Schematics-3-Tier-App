@@ -124,7 +124,7 @@ module "accesscheck" {
 #  Config servers
 ##################################################################################################
 
-output "Datos del worspace" {
+output "datosdelworspace" {
   value = lookup(data.external.env.result, "IC_ENV_TAGS", "")
 }
 
