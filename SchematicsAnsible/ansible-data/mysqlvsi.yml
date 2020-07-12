@@ -4,11 +4,10 @@
   remote_user: root 
 
   tasks:
+    - set_fact:    
+        mysql_db: "{{ hostvars[ item ].ansible_host }}"
+      with_items: "{{groups['backend']}}"
 
-  - set_fact:    
-      mongo_db: "{{ hostvars[ item ].ansible_host }}"
-    with_items: "{{groups['backend']}}"
-    
   - name: Install update
   - hosts: backend
     raw: apt -y update
