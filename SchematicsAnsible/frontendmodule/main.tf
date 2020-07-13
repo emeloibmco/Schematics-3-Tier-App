@@ -32,6 +32,12 @@ resource "ibm_is_instance" "frontend-server" {
   #user_data      = data.template_cloudinit_config.app_userdata.rendered
 }
 
+resource "ibm_is_floating_ip" "frontend" {
+  count  = var.frontend_count
+  name   = "${var.unique_id}-float-frontend-ip-${count.index + 1}"
+  target = ibm_is_instance.frontend-server[count.index].primary_network_interface[0].id
+}
+
 
 ##############################################################################
 # Public load balancer
@@ -39,50 +45,50 @@ resource "ibm_is_instance" "frontend-server" {
 ##############################################################################
 
 
-resource "ibm_is_lb" "webapptier-lb" {
-  name           = "webapptier"
-  type           = "public"
-  subnets        = toset(var.subnet_ids)
-  resource_group = var.ibm_is_resource_group_id
+#resource "ibm_is_lb" "webapptier-lb" {
+#  name           = "webapptier"
+#  type           = "public"
+#  subnets        = toset(var.subnet_ids)
+#  resource_group = var.ibm_is_resource_group_id
+#
+#  timeouts {
+#    create = "15m"
+#    delete = "15m"
+#  }
+#
+#
+#}
 
-  timeouts {
-    create = "15m"
-    delete = "15m"
-  }
 
+#resource "ibm_is_lb_listener" "webapptier-lb-listener" {
+#  lb           = ibm_is_lb.webapptier-lb.id
+#  port         = "80"
+#  protocol     = "http"
+#  default_pool = element(split("/", ibm_is_lb_pool.webapptier-lb-pool.id), 1)
+#  depends_on   = [ibm_is_lb_pool.webapptier-lb-pool]
+#}
 
-}
+#resource "ibm_is_lb_pool" "webapptier-lb-pool" {
+#  lb                 = ibm_is_lb.webapptier-lb.id
+#  name               = "webapptier-lb-pool"
+#  protocol           = "http"
+#  algorithm          = "round_robin"
+#  health_delay       = "5"
+#  health_retries     = "2"
+#  health_timeout     = "2"
+#  health_type        = "http"
+#  health_monitor_url = "/"
+#  depends_on         = [ibm_is_lb.webapptier-lb]
+#}
 
-
-resource "ibm_is_lb_listener" "webapptier-lb-listener" {
-  lb           = ibm_is_lb.webapptier-lb.id
-  port         = "80"
-  protocol     = "http"
-  default_pool = element(split("/", ibm_is_lb_pool.webapptier-lb-pool.id), 1)
-  depends_on   = [ibm_is_lb_pool.webapptier-lb-pool]
-}
-
-resource "ibm_is_lb_pool" "webapptier-lb-pool" {
-  lb                 = ibm_is_lb.webapptier-lb.id
-  name               = "webapptier-lb-pool"
-  protocol           = "http"
-  algorithm          = "round_robin"
-  health_delay       = "5"
-  health_retries     = "2"
-  health_timeout     = "2"
-  health_type        = "http"
-  health_monitor_url = "/"
-  depends_on         = [ibm_is_lb.webapptier-lb]
-}
-
-resource "ibm_is_lb_pool_member" "webapptier-lb-pool-member-zone1" {
-  count          = var.frontend_count
-  lb             = ibm_is_lb.webapptier-lb.id
-  pool           = element(split("/", ibm_is_lb_pool.webapptier-lb-pool.id), 1)
-  port           = "80"
-  target_address = ibm_is_instance.frontend-server[count.index].primary_network_interface[0].primary_ipv4_address
-  depends_on     = [ibm_is_lb_pool.webapptier-lb-pool]
-}
+#resource "ibm_is_lb_pool_member" "webapptier-lb-pool-member-zone1" {
+#  count          = var.frontend_count
+#  lb             = ibm_is_lb.webapptier-lb.id
+#  pool           = element(split("/", ibm_is_lb_pool.webapptier-lb-pool.id), 1)
+#  port           = "80"
+#  target_address = ibm_is_instance.frontend-server[count.index].primary_network_interface[0].primary_ipv4_address
+#  depends_on     = [ibm_is_lb_pool.webapptier-lb-pool]
+#}
 
 
 
@@ -109,7 +115,7 @@ locals {
 
     ["outbound", var.pub_repo_egress_cidr, "tcp", 80, 80],
     ["outbound", var.pub_repo_egress_cidr, "tcp", 443, 443],
-    ["inbound", "0.0.0.0/0", "tcp", 8080, 8080],
+    ["inbound", "0.0.0.0/0", "tcp", 80, 80],
     ["inbound", "0.0.0.0/0", "tcp", 22, 22],
     ["inbound", "0.0.0.0/0", "icmp", 0, 8]
   ]

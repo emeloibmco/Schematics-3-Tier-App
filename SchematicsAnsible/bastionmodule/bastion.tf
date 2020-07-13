@@ -65,7 +65,3 @@ resource "ibm_is_subnet" "bastion_subnet" {
   network_acl     = ibm_is_network_acl.bastion_acl.id
   depends_on      = [ibm_is_vpc_address_prefix.bast_subnet_prefix]
 }
-
-
-
-
