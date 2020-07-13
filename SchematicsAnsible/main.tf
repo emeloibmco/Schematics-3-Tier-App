@@ -141,7 +141,7 @@ data "ibm_schematics_state" "vpc" {
 resource "time_sleep" "wait_360_seconds" {
   depends_on = [data.ibm_schematics_state.vpc]
 
-  create_duration = "360s"
+  create_duration = "420s"
 }
 
 resource "local_file" "terraform_source_state" {
