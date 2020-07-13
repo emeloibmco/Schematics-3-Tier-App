@@ -2,6 +2,10 @@
   become: yes
   become_method: sudo
   remote_user: root 
+  tasks:
+  - set_fact:    
+      mysql_db: "{{ hostvars[ item ].ansible_host }}"
+    with_items: "{{groups['backend']}}"
 
 - name: Config backend
   hosts: backend
@@ -141,7 +145,7 @@
       insertbefore:  "$saveFtp = isset($options->ftp_save) && $options->ftp_save;"
       block: |
           public $dbtype = 'mysqli';
-          public $host = "172.17.0.4";
+          public $host = "{{ mysql_db }}";
           public $user = 'joomla';
           public $password = 'Passw0rd';
           public $db = 'joomla';
