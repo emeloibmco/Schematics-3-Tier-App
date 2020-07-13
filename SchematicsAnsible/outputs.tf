@@ -11,6 +11,10 @@ output "frontend_server_host_ip_addresses" {
   value = [module.frontend.primary_ipv4_address]
 }
 
+output "frontend_app_ip_addresses" {
+  value = module.frontend.app_ip[0]
+}
+
 output "backend_server_host_ip_addresses" {
   value = [module.backend.primary_ipv4_address]
 }
