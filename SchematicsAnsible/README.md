@@ -4,20 +4,18 @@ Plantilla para el aprovisionamiento de recursos necesarios para el despliegue de
 
 ## Requerimentos
 
-Como caracteristicas especificas de este laboratorio se uso:
+Como caracteristicas especificas de este despliegue se requiere:
 
 *	Contar con una cuenta en IBM Cloud 💻
 
 ## Indice
 
 * Arquitectura de implementación
-* Ejecución de la plantilla de terraform en IBM Cloud Schematics
-* Ejecución del playbook de ansible para la configuración de mysql en el virtual server
-* Despliegue y configuración de la imagen joomla en el cluster de kubernetes
+* Ejecución de la plantilla de terraform y ansible en IBM Cloud Schematics
 
 ---
 
-### 2. Arquitectura de implementación
+### 1. Arquitectura de implementación
 
 Con el fin de ilustrar los recursos necesarios para el despliegue de la plataforma Joomla, a continuación de muestra un diagrama.
 
@@ -27,7 +25,7 @@ Con el fin de ilustrar los recursos necesarios para el despliegue de la platafor
 
 ---
 
-### 3. Ejecución de la plantilla de terraform en IBM Cloud Schematics
+### 2. Ejecución de la plantilla de terraform en IBM Cloud Schematics
 
 Ingrese a IBM Cloud para crear un espacio de trabajo en [Schematics](https://cloud.ibm.com/schematics/workspaces) y seleccione crear espacio de trabajo.
 
