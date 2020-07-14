@@ -1,123 +1,54 @@
-# Example VPC with SSH access and Bastion Host for Redhat Ansible
+# Aprovisionamiento y configuracion de joomla con Terraform y Ansible
 
-This Terraform example for IBM Cloud Schematics illustrates how to
-deploy an IBM Cloud Gen2 VPC with a bastion host to provide secure
-remote SSH access. The intended usage is for remote software
-installation using Terraform remote-exec or Redhat Ansible executed by
-Schematics.
+Plantilla para el aprovisionamiento de recursos necesarios para el despliegue de joomla en una arquitectura VPC IBM CLoud con VSI.
 
-The example and Terraform modules are supplied 'as is' and only seek to
-implement a 'reasonable' set of best practices for bastion host
-configuration. Your own organisation may have additional requirements
-that may need be implemented before it can be used.
+## Requerimentos
 
-## Multi-tier VPC with bastion host SSH access
+Como caracteristicas especificas de este laboratorio se uso:
 
-The figure here illustrates the configuration of the VPC deployed by
-this example. For a detailed explanation of bastion host, ACL and
-security group configuration, please see the IBM Developer article
-[Secure VPC access with a bastion host and Terraform]().
+*	Contar con una cuenta en IBM Cloud 💻
 
-![Multi-tier VPC with bastion host](images/multitiervpc.png)
+## Indice
 
-The example deploys a three tier application environment, with a public facing
-load balancer, a frontend app tier for application webservers and a backend tier For
-a database server. The two frontend servers are deployed across multiple MZR zones to
-demonstrate scaling and HA resilience. The backend tier can be optionally provisioned with
-multiple VSIs across zones.
+* Arquitectura de implementación
+* Ejecución de la plantilla de terraform en IBM Cloud Schematics
+* Ejecución del playbook de ansible para la configuración de mysql en el virtual server
+* Despliegue y configuración de la imagen joomla en el cluster de kubernetes
 
-Public gateways and DNS access is configured to support deployment of opensource application
-packages using Redhat Ansible.  
+---
 
+### 2. Arquitectura de implementación
 
+Con el fin de ilustrar los recursos necesarios para el despliegue de la plataforma Joomla, a continuación de muestra un diagrama.
 
-This example was written for use with IBM Cloud Schematics, therefore
-the provider block does not include an API Key. To run standalone with
-Terraform, modify the example to input your IBM Cloud API key as an
-input variable.
+<p align="center">
+<img width="800" alt="img8" src="https://user-images.githubusercontent.com/40369712/87473604-57d64980-c5e7-11ea-8ef6-ff8a454c1923.png">
+</p>
 
-### SSH access restrictions
-A layered approach to SSH access is applied in this example. SSH access to app VSI's is restricted
-to connection from the Schematics service only. When used with Schematics only SSH operations performed
-by Terraform remote-exec or Redhat Ansible are enabled to access the app VSIs. All other SSH access from
-the public or private networks to the app VSIs is denied.
+---
 
-VPC Security Group and network ACL rules are applied to:
-- Allow only inbound SSH access to the bastion host from Schematics
-- Allow only inbound SSH access to the app VSIs from the bastion host
-- Allow only inbound HTTP access on port 8080 from the public load-balancer to the frontend VSIs
-- Allow only inbound Mongodb access on port 27017 from the frontend VSIs to the backend VSIs
-- Outbound access is enabled for both frontend and backend VSIs for DNS and software installation
-- All other inbound and outbound traffic to the bastion host and app VSIs is denied by both ACLs and Security groups
+### 3. Ejecución de la plantilla de terraform en IBM Cloud Schematics
 
-To mitigate the security risks of SSH connections over the public network to the
-bastion hosts and VSIs, the network
-Access Control List (ACL) rules and security groups are configured to only
-allow SSH access from the CIDR ranges used by the Schematics service. Access
-from all other public addresses is denied. If SSH access is desired from a public CIDR other than the Schematics service, an input value for
-`ssh_source_cidr_override` should be specified at execution time.
+Ingrese a IBM Cloud para crear un espacio de trabajo en [Schematics](https://cloud.ibm.com/schematics/workspaces) y seleccione crear espacio de trabajo.
 
-If used with standalone Terraform, `ssh_source_cidr_override` is
-set by default to open access with the CIDR "0.0.0.0/0". To limit access
-to a specific source IP address or CIDR, configure a restrictive CIDR.
+<p align="center">
+<img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/87476947-e13c4a80-c5ec-11ea-872f-d1f10db02c47.png">
+</p>
 
-### Bastion host SSH configuration
-The example and Terraform modules are supplied 'as is' and only seek to implement a 'reasonable' set of best practices for bastion host configuration.
-
-The following configuration is applied to the bastion host. The default SSH config is further locked down, along with
-optimisation to support software provisioning with Ansible.  
-
-```
-  - yum --security update
-  - sed -i "s/#MaxSessions 10/MaxSessions 50/" /etc/ssh/sshd_config
-  - sed -i "s/X11Forwarding yes/X11Forwarding no/" /etc/ssh/sshd_config
-  - sed -i "s/PermitRootLogin yes/PermitRootLogin prohibit-password/" /etc/ssh/sshd_config
-  - sed -i "s/#AllowAgentForwarding yes/AllowAgentForwarding no/" /etc/ssh/sshd_config
-  - echo "MaxStartups 50:30:80"  >> /etc/ssh/sshd_config
-  - echo "AllowStreamLocalForwarding no"  >> /etc/ssh/sshd_config
-  - echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
-  - echo 'UsePAM yes' >> /etc/ssh/sshd_config
-  - echo 'AuthenticationMethods publickey' >> /etc/ssh/sshd_config
-  - service sshd restart
-```
+Allí debera proporcional un nombre, las etiquetas que desee, seleccionar el grupo de recursos, la hubicación, proporcionar una descripción y finalmente seleccionar crear.
 
 
+<p align="center">
+<img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/87478029-b81cb980-c5ee-11ea-984a-9c16b313b736.png">
+</p>
 
-## Deployed resources
+Dentro de **Valores** Ingrese la [URL del git](https://github.com/emeloibmco/Schematics-VPC-Schematics-3-Tier-App-Joomla/tree/master/SchematicsAnsible) donde se encuentra la plantilla de despliegue de Schematics, seleccione la version 0.12 de terraform y presione Guardar informacion de la plantilla.
 
-The following resources are deployed by this template and may incur
-charges.
+<p align="center">
+<img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/87478899-257d1a00-c5f0-11ea-9923-658736cf5866.png">
+</p>
 
-- 1 x Floating IP address
-- 2 x Public Gateway
-- 1 x Load Balancer
-- 4 x VSIs
-- 1 x VPC
-- Access Control Lists
-- Security Groups
-
-## Usage with Redhat Ansible
-
-Support for software installation and configuration with Redhat Ansible is enabled by the addition
-of VSI tags. The Ansible group assignment of VSIs is determined by the setting of IBM Cloud resource
-tags on the `ibm_is_instance` resource statements. Tags are prefixed with "ans_group:" followed by the group name.   '
-`tags = ["ans_group:backend"]`. A VSI can be assigned to multiple groups, by the addition of multiple `ans_group:`
-prefixed tags.
-
-In this example VSI's are grouped by the Terraform module (frontend, backend) used for deployment. This ensures the match between the VPC network configuration of a VSI and the Ansible role deployed on the VSI.
-
-Correct specification of tags is essential for operation of the Ansible dynamic inventory
-script used by Ansible to retrieve host information from the Terraform State file. The tags here should match the roles
-defined in the site.yml playbook file.
-
-## Requirements
-
-
-|  **Name**                  | **Version** |
-|  --------------------------| -------------|
-|  terraform                 | ~> 0.12 |
-|  terraform_provider_ibm    | ~> 1.5.2 |
-
+Una vez hecho el paso anterior Schematics cargara las variables de personalización de la plantilla, donde podra modificar lo siguiente:
 
 ## Inputs
 
@@ -136,106 +67,25 @@ defined in the site.yml playbook file.
 |  ssh_accesscheck | Set to "true' if access to VSIs via SSH is to be validated |  string | | "false" |  |
 |  ssh_private_key | Optional private key from key pair. Only required if it desired to validate remote SSH access to the bastion host and VSIs. | string  | | |  ✓   |               
 
-## Outputs
 
-|  **name**      |    **description**  |
-|  --------------------------------------- | ------------------------------------------- |
-|  bastion_ip_addresses             |     Public bastion IP address
-|  frontend_server_host_ip_addresses |  List of frontend VSI private IP addresses |
-|  backend_server_host_ip_addresses  |  List of backend VSI private IP addresses |
+<p align="center">
+<img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/87479485-324e3d80-c5f1-11ea-8bb0-e1d3daad9544.png">
+</p>
 
-## Instructions
+Una vez modificadas las variables de entrada, seleccione guardar cambios.
 
-1.  Make sure that you have the [required IBM Cloud IAM
-    permissions](https://cloud.ibm.com/docs/vpc?topic=vpc-managing-user-permissions-for-vpc-resources) to
-    create and work with VPC infrastructure and you are [assigned the
-    correct
-    permissions](https://cloud.ibm.com/docs/schematics?topic=schematics-access) to
-    create the workspace and deploy resources.
-2.  [Generate an SSH
-    key](https://cloud.ibm.com/docs/vpc?topic=vpc-ssh-keys).
-    The SSH key is required to access the provisioned VPC virtual server
-    instances via the bastion host. After you have created your SSH key,
-    make sure to [upload this SSH key to your IBM Cloud
-    account](https://cloud.ibm.com/docs/vpc-on-classic-vsi?topic=vpc-on-classic-vsi-managing-ssh-keys#managing-ssh-keys-with-ibm-cloud-console) in
-    the VPC region and resource group where you want to deploy this
-    example
-3.  Create the Schematics workspace:
-   1.  From the IBM Cloud menu
-    select [Schematics](https://cloud.ibm.com/schematics/overview).
-       - Click Create a workspace.   
-       - Enter a name for your workspace.   
-       - Click Create to create your workspace.
-    2.  On the workspace **Settings** page, enter the URL of this example in
-    the Schematics examples Github repository.
-     - Select the Terraform version: Terraform 0.12.
-     - Click **Save template information**.
-     - In the **Input variables** section, review the default input
-        variables and provide alternatives if desired. The only
-        mandatory parameter is the name given to the SSH key that you
-        uploaded to your IBM Cloud account.
-      - Click **Save changes**.
+Una vez guardados los cambios, nos dirigimos a **Actividad** y para ejecutar el despliegue del ambiente deberemos seleccionar generar plan y posteriormente aplicar plan.
 
-4.  From the workspace **Settings** page, click **Generate plan** 
-5.  Click **View log** to review the log files of your Terraform
-    execution plan.
-6.  Apply your Terraform template by clicking **Apply plan**.
-7.  Review the log file to ensure that no errors occurred during the
-    provisioning, modification, or deletion process.
-
-The output of the Schematics Apply Plan will list the public IP address
-of the bastion host and the frontend and backend app servers. These can
-be used for input to subsequent software provisioning templates using
-remote-exec or Redhat Ansible.
-
-```
-Outputs:
-
-frontend_server_host_ip_addresses = [
-  [
-    "172.16.0.5",
-    "172.16.2.5",
-  ],
-]
-
-backend_server_host_ip_addresses = [
-  [
-    "172.17.0.4",
-  ],
-]
-
-bastion_host_ip_address = [
-  "52.116.132.26",
-]
-
-app_dns_hostname = 2989c099-us-south.lb.appdomain.cloud
-```
-
-## Validating the VPC security configuration
-
-The default VPC security configuration is to only allow SSH access from
-IP ranges used by IBM Cloud Schematics. Any access from IP addresses
-outside these ranges will be denied.
-
-To validate Schematics has successfully provisioned SSH access, the template can be run with the
-input variable `ssh_accesscheck = true`. This uses Terraform
-remote-exec to SSH onto the deployed VSIs and return the host name. If Schematics cannot
-access the VSIs the Apply will fail with a `timeout` message.  
+<p align="center">
+<img width="900" alt="img8" src="https://user-images.githubusercontent.com/40369712/87479985-139c7680-c5f2-11ea-9dd7-eb5c7615a3b6.png">
+</p>
 
 
-To validate that access is denied from other IP addresses, the following
-SSH command can be used from a local workstation. Copy and paste the
-command into a terminal session, inserting the returned values for the
-bastion IP and one of the frontend VSIs and the path to the file
-containing the private SSH key.
+---
 
-```
-ssh -i ~/.ssh/<ansible> -o ProxyCommand="ssh -i ~/.ssh/<ansible>
--W %h:%p root@52.116.132.26" root@172.16.0.5
-```
+# Referencias 📖
 
-The command will return:
-
-```
-ssh: connect to host 52.116.132.26 port 22: Operation timed out
-```
+* [Pagina de joomla](https://www.joomla.org/about-joomla.html).
+* [Guia para la instalación de mysql](https://linuxize.com/post/how-to-install-mysql-on-ubuntu-18-04/).
+* [Instalación de ansible en SO Ubuntu](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-ubuntu).
+* [Modulos de ansible](https://docs.ansible.com/ansible/latest/modules/).# Example VPC with SSH access and Bastion Host for Redhat Ansible
